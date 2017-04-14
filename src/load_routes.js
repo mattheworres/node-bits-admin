@@ -1,6 +1,8 @@
-import loadInfoRoutes from './routes/load_info_routes';
+import schemaInfo from './routes/schema_info';
+import media from './routes/media';
 
 export default config =>
   [
-    ...loadInfoRoutes(config),
+    schemaInfo(config),
+    media(config),
   ];

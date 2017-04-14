@@ -40,7 +40,7 @@ const mapSchema = (schema, models) =>
     ];
   }, []);
 
-const schemaInfo = config => {
+export default config => {
   const apiRoot = config.root || '/api';
   return {
     verb: GET,
@@ -55,8 +55,3 @@ const schemaInfo = config => {
     },
   };
 };
-
-export default config =>
-  [
-    schemaInfo(config),
-  ];
