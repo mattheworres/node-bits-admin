@@ -1,0 +1,34 @@
+// sass-lint:disable nesting-depth
+.menu {
+  background-color: $black;
+  height: 100%;
+
+  h4 {
+    color: $white;
+    font-weight: bold;
+
+    margin: 0 0 5px;
+    padding: 5px;
+
+    text-decoration: underline;
+  }
+
+  .nav {
+    li {
+      .active {
+        background-color: $white;
+        color: $black;
+      }
+
+      a {
+        color: $white;
+      }
+
+      a:focus,
+      a:hover {
+        background-color: $white;
+        color: $black;
+      }
+    }
+  }
+}

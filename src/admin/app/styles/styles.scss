@@ -4,7 +4,10 @@ $fa-font-path: '~font-awesome/fonts/';
 @import '~bootstrap-sass/assets/stylesheets/_bootstrap';
 @import '~font-awesome/scss/font-awesome';
 
+@import './colors';
+
 @import '../features/auth/styles/login.scss';
+@import '../features/menu/styles/menu.scss';
 
 html,
 body,
