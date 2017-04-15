@@ -1,9 +1,29 @@
-import {PropTypes} from 'react';
+import {Component} from 'react';
+import {connect} from 'react-redux';
 
-export default function App({children}) {
-  return children;
+import {loadCookie} from './features/auth/actions';
+import {loadSchema} from './features/schema/actions';
+import {userSelector} from './features/auth/selectors';
+
+class App extends Component {
+  componentWillMount() {
+    this.props.loadCookie();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user !== this.props.user) {
+      this.props.loadSchema();
+    }
+  }
+
+  render() {
+    return this.props.children;
+  }
 }
 
-App.propTypes = {
-  children: PropTypes.element,
-};
+const mapStateToProps = state =>
+({
+  user: userSelector(state),
+});
+
+export default connect(mapStateToProps, {loadCookie, loadSchema})(App);
