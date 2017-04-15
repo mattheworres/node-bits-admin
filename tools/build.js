@@ -1,13 +1,3 @@
-/* eslint-disable */
-require('shelljs/global');
-
-echo('Building ...');
-
-// clean
-rm('-rf', 'lib');
-
-// move over
-exec('babel -d lib/ src/');
-rm('-rf', 'lib/tools/');
-
-echo('Build Complete');
+/* eslint-disable no-var */
+require('./build_api');
+require('./build_admin');

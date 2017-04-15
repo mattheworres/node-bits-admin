@@ -4,6 +4,8 @@
   "description": "node-bits-admin provides a CMS for your node-bits-api",
   "main": "lib/index.js",
   "scripts": {
+    "build-admin": "node tools/build_admin.js",
+    "build-api": "node tools/build_api.js",
     "start": "nodemon src/index.js --exec babel-node",
     "compile": "node tools/build.js",
     "prepublish": "npm run compile"
