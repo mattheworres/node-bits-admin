@@ -1,4 +1,5 @@
 import './styles/styles.scss';
+
 import './babelHelpers';
 import 'core-js/es6/symbol';
 import 'core-js/es6/promise';

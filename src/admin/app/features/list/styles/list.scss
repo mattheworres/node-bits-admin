@@ -1,0 +1,23 @@
+.list {
+  margin-right: 20px;
+
+  .options {
+    cursor: pointer;
+    font-size: 10px;
+    text-align: center;
+  }
+}
+
+.popover-options {
+  ul {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      cursor: pointer;
+      list-style-position: outside;
+      margin-top: 8px;
+      padding: 0;
+    }
+  }
+}

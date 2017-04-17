@@ -3,11 +3,10 @@ import {connect} from 'react-redux';
 import autobind from 'class-autobind';
 import {Nav, NavItem} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
-import Humanize from 'humanize-plus';
-import pluralize from 'pluralize';
 
 import {selectMenuItem} from '../actions';
 import {menuItemsSelector, activeKeySelector} from '../selectors';
+import {makeTitle} from '../../shared/services';
 
 class Menu extends Component {
   constructor(props) {
@@ -23,14 +22,9 @@ class Menu extends Component {
   // render
   renderItems() {
     return this.props.items.map(item => {
-      const text = pluralize(
-        Humanize.titleCase(
-          item.split(/(?=[A-Z])/).join(' ')
-        )
-      );
-
+      const text = makeTitle(item);
       return (
-        <LinkContainer key={item} to={`?item=${item}`}>
+        <LinkContainer key={item} to={`/list/${item}`}>
           <NavItem eventKey={item}>{text}</NavItem>
         </LinkContainer>
       );
