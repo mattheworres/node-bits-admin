@@ -1,14 +1,15 @@
 import _ from 'lodash';
-import $ from 'jquery';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Table, Popover, OverlayTrigger} from 'react-bootstrap';
-import FontAwesome from 'react-fontawesome';
+import {Table} from 'react-bootstrap';
 import autobind from 'class-autobind';
 
 import {editModel} from '../actions';
 import {deleteModel} from '../../data/actions';
 import {makeTitle} from '../../shared/services';
+
+import OptionsGear from './optionsGear';
+import renderValue from './renderValue';
 
 class ModelTable extends Component {
   constructor(props) {
@@ -17,22 +18,14 @@ class ModelTable extends Component {
   }
 
   // actions
-  handleEdit(item, index) {
-    this.hidePopover(index);
-
+  handleEdit(item) {
     const {schema} = this.props;
     this.props.editModel(schema, item);
   }
 
-  handleDelete(item, index) {
-    this.hidePopover(index);
-
+  handleDelete(item) {
     const {schema} = this.props;
     this.props.deleteModel(schema, item.id);
-  }
-
-  hidePopover(index) {
-    $(`#options-popover-${index}`).hide();
   }
 
   // render
@@ -56,39 +49,20 @@ class ModelTable extends Component {
   renderBody() {
     const {schema, data} = this.props;
 
-    return data.map((item, index) => {
-      const popoverBottom = (
-        <Popover id={`options-popover-${index}`} title="Options" className="popover-options">
-          <ul>
-            <li onClick={this.handleEdit.bind(this, item, index)}>
-              <FontAwesome name="pencil" /> Edit
-            </li>
-            <li onClick={this.handleDelete.bind(this, item, index)}>
-              <FontAwesome name="trash-o" /> Delete
-            </li>
-          </ul>
-        </Popover>
-      );
-
-      return (
-        <tr key={index}>
-          {
-            _.map(schema.map, (value, key) => (
-              <td key={`${index}-${key}`}>
-                {item[key]}
-              </td>
-            ))
-          }
-          <td key={`${index}-options`}>
-            <div className="options">
-              <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverBottom}>
-                <FontAwesome name="cog" />
-              </OverlayTrigger>
-            </div>
-          </td>
-        </tr>
-      );
-    });
+    return data.map((item, index) => (
+      <tr key={index}>
+        {
+          _.map(schema.map, (value, key) => (
+            <td key={`${index}-${key}`}>
+              {renderValue(item, key, value)}
+            </td>
+          ))
+        }
+        <td key={`${index}-options`}>
+          <OptionsGear index={index} item={item} onEdit={this.handleEdit} onDelete={this.handleDelete} />
+        </td>
+      </tr>
+      ));
   }
 
   render() {

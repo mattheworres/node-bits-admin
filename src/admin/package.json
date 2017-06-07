@@ -37,6 +37,7 @@
     "react-addons-shallow-compare": "^15.4.2",
     "react-bootstrap": "^0.30.8",
     "react-cookie": "^1.0.5",
+    "react-datetime": "^2.8.9",
     "react-dom": "^15.4.2",
     "react-fontawesome": "^1.5.0",
     "react-loading-overlay": "^0.2.4",
