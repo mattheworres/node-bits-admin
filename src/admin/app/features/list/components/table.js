@@ -35,7 +35,7 @@ class ModelTable extends Component {
     return (
       <tr>
         {
-          _.map(schema.map, (value, key) => (
+          _.map(schema.order, key => (
             <th key={key}>
               {makeTitle(key, {plural: false})}
             </th>
@@ -52,11 +52,15 @@ class ModelTable extends Component {
     return data.map((item, index) => (
       <tr key={index}>
         {
-          _.map(schema.map, (value, key) => (
-            <td key={`${index}-${key}`}>
-              {renderValue(item, key, value)}
-            </td>
-          ))
+          _.map(schema.order, key => {
+            const prop = schema.map[key];
+
+            return (
+              <td key={`${index}-${key}`}>
+                {renderValue(item, key, prop)}
+              </td>
+            );
+          })
         }
         <td key={`${index}-options`}>
           <OptionsGear index={index} item={item} onEdit={this.handleEdit} onDelete={this.handleDelete} />

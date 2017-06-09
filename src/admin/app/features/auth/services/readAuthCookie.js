@@ -1,5 +1,7 @@
-import cookie from 'react-cookie';
+import Cookies from 'universal-cookie';
 import {COOKIE_AUTH} from '../constants';
 
+const cookies = new Cookies();
+
 export default () =>
-  cookie.load(COOKIE_AUTH);
+  cookies.get(COOKIE_AUTH);

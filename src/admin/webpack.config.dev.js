@@ -86,6 +86,7 @@ export default {
             loader: 'postcss-loader',
             options: {
               plugins: () => [autoprefixer],
+              sourceMap: true,
             },
           },
           'sass-loader?sourceMap',

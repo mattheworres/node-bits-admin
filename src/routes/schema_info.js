@@ -23,6 +23,7 @@ const mapSchema = (schema, models) =>
           model: key,
           mode: READ_WRITE,
           map: value,
+          order: _.keys(value),
         },
       ];
     }
@@ -36,6 +37,7 @@ const mapSchema = (schema, models) =>
       {
         ...config,
         map: mapFields(value, config),
+        order: config.order || _.keys(value),
       },
     ];
   }, []);
