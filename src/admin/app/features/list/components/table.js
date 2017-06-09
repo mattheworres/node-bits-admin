@@ -19,13 +19,13 @@ class ModelTable extends Component {
 
   // actions
   handleEdit(item) {
-    const {schema} = this.props;
-    this.props.editModel(schema, item);
+    const {schema, editModel} = this.props;
+    editModel(schema, item);
   }
 
   handleDelete(item) {
-    const {schema} = this.props;
-    this.props.deleteModel(schema, item.id);
+    const {schema, deleteModel} = this.props;
+    deleteModel(schema, item.id);
   }
 
   // render

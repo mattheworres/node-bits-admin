@@ -27,14 +27,16 @@ class List extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.model !== this.props.model) {
+    if (nextProps.model !== this.props.model || nextProps.schema !== this.props.schema) {
       this.loadData(nextProps);
     }
   }
 
   // actions
   loadData(props) {
-    props.loadData(props.model);
+    if (props.model && props.schema) {
+      props.loadData(props.model, props.schema);
+    }
   }
 
   handleNewModel() {

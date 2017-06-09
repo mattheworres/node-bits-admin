@@ -10,8 +10,6 @@ const rendererMap = {
 };
 
 export default (item, key, schema) => {
-  console.log(key, ': ', schema);
-
   const renderer = rendererMap[schema.type];
   return renderer ? renderer(item, key, schema) : null;
 };

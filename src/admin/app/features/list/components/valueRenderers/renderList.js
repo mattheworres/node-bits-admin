@@ -6,7 +6,7 @@ const render1to1 = (item, source) => (
   <span>{item[source.key][source.display]}</span>
 );
 
-const render1ToM = (item, itemKey, source) => {
+const renderNToM = (item, itemKey, source) => {
   const values = item[source.key] || [];
 
   if (values.length > 0 && values.length <= 3) {
@@ -25,7 +25,7 @@ const renderList = ({item, itemKey, schema}) => {
     return render1to1(item, source);
   }
 
-  return render1ToM(item, itemKey, source);
+  return renderNToM(item, itemKey, source);
 };
 
 const RenderList = connect()(renderList);
