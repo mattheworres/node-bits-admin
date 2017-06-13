@@ -9,7 +9,7 @@ import {deleteModel} from '../../data/actions';
 import {makeTitle} from '../../shared/services';
 
 import OptionsGear from './optionsGear';
-import renderValue from './renderValue';
+import {renderValue} from './value';
 
 class ModelTable extends Component {
   constructor(props) {

@@ -5,7 +5,7 @@ import {Modal, Button} from 'react-bootstrap';
 import {reduxForm, Field} from 'redux-form';
 import autobind from 'class-autobind';
 
-import EditField from './editField';
+import {editValue} from './value';
 import {stopEdit} from '../actions';
 import {saveModel} from '../../data/actions';
 import {editModalSelector} from '../selectors';
@@ -45,9 +45,14 @@ class EditModal extends Component {
 
   // render
   renderForm() {
-    const {schema} = this.props;
-    return _.map(schema.map,
-      (value, key) => <Field key={key} name={key} component={EditField} detail={value} />);
+    const {schema, model} = this.props;
+    return _.map(schema.order, key => {
+      const Edit = editValue(model, key, schema);
+
+      return (
+        <Field key={key} name={key} component={Edit} />
+      );
+    });
   }
 
   render() {
@@ -68,7 +73,7 @@ class EditModal extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form>
+          <form className="editForm">
             {this.renderForm()}
           </form>
         </Modal.Body>

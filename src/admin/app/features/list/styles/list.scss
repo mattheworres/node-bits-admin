@@ -21,3 +21,14 @@
     }
   }
 }
+
+.editForm {
+  .checkbox-inline input[type="checkbox"] {
+    margin-top: -7px;
+    margin-left: -10px;
+  }
+
+  .form-control {
+    margin-bottom: 15px;
+  }
+}
