@@ -15,7 +15,7 @@ class EditList extends Component {
     autobind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.loadData(this.props);
   }
 

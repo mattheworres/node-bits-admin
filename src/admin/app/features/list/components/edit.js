@@ -59,9 +59,7 @@ class EditModal extends Component {
     const {shown, model, schema, handleSubmit} = this.props;
 
     if (!shown) {
-      return (
-        <Modal show={shown} onHide={this.handleCancel} />
-      );
+      return null;
     }
 
     return (
@@ -86,13 +84,12 @@ class EditModal extends Component {
   }
 }
 
-const form = reduxForm({
-  form: 'edit-modal',
-})(EditModal);
-
 const mapStateToProps = state =>
 ({
   ...editModalSelector(state),
 });
+const editModal = connect(mapStateToProps, {stopEdit, saveModel})(EditModal);
 
-export default connect(mapStateToProps, {stopEdit, saveModel})(form);
+export default reduxForm({
+  form: 'edit-modal',
+})(editModal);
