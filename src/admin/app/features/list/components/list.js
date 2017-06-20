@@ -15,6 +15,7 @@ import {modelDataSelector} from '../../data/selectors';
 import {modelSchemaSelector} from '../../schema/selectors';
 
 import {makeTitle} from '../../shared/services';
+import {READ_ONLY} from '../../shared/constants';
 
 class List extends Component {
   constructor(props) {
@@ -44,6 +45,20 @@ class List extends Component {
   }
 
   // render
+  renderNewButton() {
+    const {schema, model} = this.props;
+
+    if (schema.mode === READ_ONLY) {
+      return null;
+    }
+
+    return (
+      <Button bsStyle="success" className="pull-right" onClick={this.handleNewModel}>
+        <FontAwesome name="plus-circle" /> &nbsp;New {makeTitle(model, {plural: false})}
+      </Button>
+    );
+  }
+
   render() {
     const {data, schema, model} = this.props;
     if (!data || !schema) {
@@ -52,9 +67,7 @@ class List extends Component {
 
     return (
       <div className="list">
-        <Button bsStyle="success" className="pull-right" onClick={this.handleNewModel}>
-          <FontAwesome name="plus-circle" /> &nbsp;New {makeTitle(model, {plural: false})}
-        </Button>
+        {this.renderNewButton()}
 
         <h1>{makeTitle(model)}</h1>
 

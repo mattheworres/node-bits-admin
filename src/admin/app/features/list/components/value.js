@@ -11,7 +11,7 @@ import {
 } from './valueRenderers';
 
 import {
-  editString, editNumber, editBoolean, editDate,
+  editString, editNumber, editBoolean, editDate, editList,
 } from './valueEditors';
 
 // render value
@@ -52,6 +52,8 @@ const editMap = {
   [DOUBLE]: editNumber,
   [FLOAT]: editNumber,
 
+  [LIST]: editList,
+
   [DATE]: editDate,
 };
 
@@ -69,4 +71,9 @@ export const editValue = (item, key, schema) => input => {
       {renderEdit(item, key, field, input)}
     </div>
   );
+};
+
+export default {
+  renderValue,
+  editValue,
 };

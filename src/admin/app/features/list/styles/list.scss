@@ -24,11 +24,23 @@
 
 .editForm {
   .checkbox-inline input[type="checkbox"] {
-    margin-top: -7px;
-    margin-left: -10px;
+    position: relative;
+    display: inline;
+
+    top: -2px;
+    left: 8px;
+  }
+
+  .checkbox-container {
+    display: inline-block;
+    margin-bottom: 15px;
   }
 
   .form-control {
+    margin-bottom: 15px;
+  }
+
+  .Select-control {
     margin-bottom: 15px;
   }
 }

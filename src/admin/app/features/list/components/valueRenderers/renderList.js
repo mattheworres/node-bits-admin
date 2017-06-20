@@ -1,16 +1,20 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import {makeTitle} from '../../../shared/services';
+import {ONE_TO_ONE} from '../../../shared/constants';
 
-const render1to1 = (item, source) => (
-  <span>{item[source.key][source.display]}</span>
+const render1to1 = (item, itemKey, source) => (
+  <span>{item[source.reference][source.referenceDisplay]}</span>
 );
 
 const renderNToM = (item, itemKey, source) => {
-  const values = item[source.key] || [];
+  const values = item[itemKey] || [];
 
   if (values.length > 0 && values.length <= 3) {
-    return values.map(x => x[source.display]).join(', ');
+    return (
+      <span>
+        {values.map(x => x[source.referenceDisplay]).join(', ')}
+      </span>
+    );
   }
 
   return (
@@ -18,17 +22,15 @@ const renderNToM = (item, itemKey, source) => {
   );
 };
 
-const renderList = ({item, itemKey, schema}) => {
+const RenderList = ({item, itemKey, schema}) => {
   const {source} = schema;
 
-  if ((source.selections || 1) === 1) {
-    return render1to1(item, source);
+  if (source.type === ONE_TO_ONE) {
+    return render1to1(item, itemKey, source);
   }
 
   return renderNToM(item, itemKey, source);
 };
-
-const RenderList = connect()(renderList);
 
 export default (item, key, schema) => (
   <RenderList item={item} itemKey={key} schema={schema} />

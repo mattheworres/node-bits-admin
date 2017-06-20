@@ -7,6 +7,7 @@ import autobind from 'class-autobind';
 import {editModel} from '../actions';
 import {deleteModel} from '../../data/actions';
 import {makeTitle} from '../../shared/services';
+import {READ_ONLY} from '../../shared/constants';
 
 import OptionsGear from './optionsGear';
 import {renderValue} from './value';
@@ -29,6 +30,18 @@ class ModelTable extends Component {
   }
 
   // render
+  renderGear(index, item) {
+    const {schema} = this.props;
+
+    if (schema.mode === READ_ONLY) {
+      return null;
+    }
+
+    return (
+      <OptionsGear index={index} item={item} onEdit={this.handleEdit} onDelete={this.handleDelete} />
+    );
+  }
+
   renderHeader() {
     const {schema} = this.props;
 
@@ -37,7 +50,7 @@ class ModelTable extends Component {
         {
           _.map(schema.order, key => (
             <th key={key}>
-              {makeTitle(key, {plural: false})}
+              {makeTitle(schema.map[key].title || key, {plural: false})}
             </th>
           ))
         }
@@ -63,7 +76,7 @@ class ModelTable extends Component {
           })
         }
         <td key={`${index}-options`}>
-          <OptionsGear index={index} item={item} onEdit={this.handleEdit} onDelete={this.handleDelete} />
+          {this.renderGear(index, item)}
         </td>
       </tr>
       ));

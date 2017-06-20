@@ -1,4 +1,5 @@
 import './styles/styles.scss';
+import 'react-select/dist/react-select.css';
 
 import './babelHelpers';
 import 'core-js/es6/symbol';

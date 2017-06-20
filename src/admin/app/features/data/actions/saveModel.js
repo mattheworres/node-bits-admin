@@ -1,17 +1,55 @@
+import _ from 'lodash';
 import {post, put} from 'truefit-react-utils';
+import {referencesForModel} from '../services';
+import {ONE_TO_MANY, MANY_TO_MANY} from '../../shared/constants';
 
 export const SAVE_MODEL = 'SAVE_MODEL';
-export const saveModel = (schema, model) => {
+
+const saveTheModel = (schema, model) => {
   const method = model.id ? put : post;
-  return {
-    type: SAVE_MODEL,
-    payload: method(schema.model, model)
-            .then(response => ({
-              model: schema.model,
-              data: {
-                ...model,
-                id: method === put ? model.id : response.data[0],
-              },
-            })),
-  };
+  return method(schema.model, model);
+};
+
+const save1toM = (schema, model, reference) => {
+  console.log(reference);
+  return null;
+};
+
+const saveMtoM = (schema, model, reference) => post('update_references', {
+  root: {
+    model: schema.model,
+    id: model.id,
+  },
+  data: model[reference.key],
+  source: reference.source,
+});
+
+const saveMap = {
+  [ONE_TO_MANY]: save1toM,
+  [MANY_TO_MANY]: saveMtoM,
+};
+
+export const saveModel = (schema, model) => dispatch => {
+  saveTheModel(schema, model)
+    .then(response => {
+      model.id = model.id ? model.id : response.data.id;
+
+      // save the references
+      const references = referencesForModel(schema);
+      const referencesToSave = references.map(reference => {
+        const logic = saveMap[reference.source.type];
+        return logic ? logic(schema, model, reference) : null;
+      }).filter(r => !_.isNull(r));
+
+      Promise.all(referencesToSave)
+      .then(() => {
+        dispatch({
+          type: SAVE_MODEL,
+          payload: {
+            model: schema.model,
+            data: model,
+          },
+        });
+      });
+    });
 };

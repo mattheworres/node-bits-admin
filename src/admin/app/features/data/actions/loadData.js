@@ -1,15 +1,10 @@
-import _ from 'lodash';
 import {get} from 'truefit-react-utils';
+import {referencesForModel} from '../services';
 
 export const LOAD_DATA = 'LOAD_DATA';
-
 export const loadData = (model, schema) => {
-  const listKeys = schema ? _.filter(_.keys(schema.map), key => {
-    const prop = schema.map[key];
-    return prop.type === 'LIST';
-  }) : [];
-
-  const url = listKeys.length > 0 ? `${model}?expand=${listKeys.join(',')}` : model;
+  const references = referencesForModel(schema);
+  const url = references.length > 0 ? `${model}?expand=${references.map(r => r.source.reference).join(',')}` : model;
 
   return {
     type: LOAD_DATA,

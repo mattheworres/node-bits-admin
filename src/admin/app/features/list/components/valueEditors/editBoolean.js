@@ -7,6 +7,8 @@ export default (item, key, schema, {input}) => {
   };
 
   return (
-    <Checkbox inline value={input.value} checked={input.value} onChange={handleChange} />
+    <div className="checkbox-container">
+      <Checkbox inline value={input.value} checked={input.value} onChange={handleChange} />
+    </div>
   );
 };

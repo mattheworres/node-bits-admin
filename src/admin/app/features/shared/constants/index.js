@@ -1,4 +1,9 @@
 export const HIDDEN = 'HIDDEN';
+export const READ_ONLY = 'READ_ONLY';
+
+export const ONE_TO_ONE = 'ONE_TO_ONE';
+export const ONE_TO_MANY = 'ONE_TO_MANY';
+export const MANY_TO_MANY = 'MANY_TO_MANY';
 
 export const INTEGER = 'INTEGER';
 export const DECIMAL = 'DECIMAL';

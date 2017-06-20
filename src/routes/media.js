@@ -26,19 +26,19 @@ class Media {
     }
 
     media
-    .then(result => {
-      const file = _.isArray(result) ? result[0] : result;
-      if (!file) {
-        res.status(404).send();
-        return;
-      }
+      .then(result => {
+        const file = _.isArray(result) ? result[0] : result;
+        if (!file) {
+          res.status(404).send();
+          return;
+        }
 
-      res.status(200).sendFile(file.path);
-    })
-    .catch(err => {
-      logError(err);
-      res.status(500).send(err);
-    });
+        res.status(200).sendFile(file.path);
+      })
+      .catch(err => {
+        logError(err);
+        res.status(500).send(err);
+      });
   }
 }
 
