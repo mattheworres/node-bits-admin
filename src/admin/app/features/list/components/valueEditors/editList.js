@@ -50,7 +50,7 @@ class EditList extends Component {
 
   // render
   renderSelect(value, multiselect, clearable) {
-    const {input: {input}, data, schema: {source}} = this.props;
+    const {input, data, schema: {source}} = this.props;
 
     const options = data.map(value => ({
       value: value[source.referenceKey],
@@ -69,13 +69,13 @@ class EditList extends Component {
   }
 
   renderEdit1To1() {
-    const {input: {input}} = this.props;
+    const {input} = this.props;
 
     return this.renderSelect(input.value, false, false);
   }
 
   renderEditNtoM() {
-    const {input: {input}, schema: {source}} = this.props;
+    const {input, schema: {source}} = this.props;
     const value = (input.value || []).map(item => item[source.referenceKey]);
 
     return this.renderSelect(value, true, true);

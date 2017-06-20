@@ -10,12 +10,7 @@ const saveTheModel = (schema, model) => {
   return method(schema.model, model);
 };
 
-const save1toM = (schema, model, reference) => {
-  console.log(reference);
-  return null;
-};
-
-const saveMtoM = (schema, model, reference) => post('update_references', {
+const saveNtoM = (schema, model, reference) => post('update_references', {
   root: {
     model: schema.model,
     id: model.id,
@@ -25,8 +20,8 @@ const saveMtoM = (schema, model, reference) => post('update_references', {
 });
 
 const saveMap = {
-  [ONE_TO_MANY]: save1toM,
-  [MANY_TO_MANY]: saveMtoM,
+  [ONE_TO_MANY]: saveNtoM,
+  [MANY_TO_MANY]: saveNtoM,
 };
 
 export const saveModel = (schema, model) => dispatch => {

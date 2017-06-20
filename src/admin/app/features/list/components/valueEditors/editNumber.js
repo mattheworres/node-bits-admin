@@ -12,5 +12,5 @@ const defaultPatternMap = {
 const pattern = schema => schema.inputPattern || defaultPatternMap[schema.type];
 
 export default (item, key, schema, input) => (
-  <FormControl {...input.input} type="number" pattern={pattern(schema)} inputMode="numeric" />
+  <FormControl {...input} type="number" pattern={pattern(schema)} inputMode="numeric" />
 );

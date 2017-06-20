@@ -1,15 +1,16 @@
-import _ from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Modal, Button} from 'react-bootstrap';
-import {reduxForm, Field} from 'redux-form';
 import autobind from 'class-autobind';
+import {submit} from 'redux-form';
 
-import {editValue} from './value';
 import {stopEdit} from '../actions';
 import {saveModel} from '../../data/actions';
 import {editModalSelector} from '../selectors';
 import {makeTitle} from '../../shared/services';
+
+import EditForm from './editForm';
+
 
 class EditModal extends Component {
   constructor(props) {
@@ -17,23 +18,13 @@ class EditModal extends Component {
     autobind(this);
   }
 
-  componentDidMount() {
-    this.loadValues(this.props.model);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.model !== this.props.model) {
-      this.loadValues(nextProps.model);
-    }
-  }
-
-  loadValues(model) {
-    this.props.initialize(model);
-  }
-
   // actions
   handleCancel() {
     this.props.stopEdit();
+  }
+
+  handleSubmit() {
+    this.props.submit('edit-modal');
   }
 
   handleSave(form) {
@@ -44,19 +35,8 @@ class EditModal extends Component {
   }
 
   // render
-  renderForm() {
-    const {schema, model} = this.props;
-    return _.map(schema.order, key => {
-      const Edit = editValue(model, key, schema);
-
-      return (
-        <Field key={key} name={key} component={Edit} />
-      );
-    });
-  }
-
   render() {
-    const {shown, model, schema, handleSubmit} = this.props;
+    const {shown, model, schema} = this.props;
 
     if (!shown) {
       return null;
@@ -71,25 +51,21 @@ class EditModal extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form className="editForm">
-            {this.renderForm()}
-          </form>
+          <EditForm schema={schema} model={model} onSubmit={this.handleSave} />
         </Modal.Body>
         <Modal.Footer>
           <Button className="pull-left" bsStyle="danger" onClick={this.handleCancel}>Cancel</Button>
-          <Button bsStyle="success" type="submit" onClick={handleSubmit(this.handleSave)}>Save</Button>
+          <Button bsStyle="success" type="submit" onClick={this.handleSubmit}>Save</Button>
         </Modal.Footer>
       </Modal>
     );
   }
 }
 
+
 const mapStateToProps = state =>
 ({
   ...editModalSelector(state),
 });
-const editModal = connect(mapStateToProps, {stopEdit, saveModel})(EditModal);
 
-export default reduxForm({
-  form: 'edit-modal',
-})(editModal);
+export default connect(mapStateToProps, {stopEdit, saveModel, submit})(EditModal);

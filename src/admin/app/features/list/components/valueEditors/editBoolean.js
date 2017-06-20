@@ -1,7 +1,7 @@
 import React from 'react';
 import {Checkbox} from 'react-bootstrap';
 
-export default (item, key, schema, {input}) => {
+export default (item, key, schema, input) => {
   const handleChange = e => {
     input.onChange(e.target.checked);
   };

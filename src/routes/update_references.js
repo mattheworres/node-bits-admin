@@ -14,7 +14,27 @@ class UpdateReferences {
     res.status(500).send();
   }
 
-  update1toM() {
+  update1toM(res, root, source, data) {
+    const modelId = `${root.model}Id`;
+    const referenceKey = source.referenceKey;
+
+    this.db.find(source.reference, {where: {[modelId]: root.id}})
+      .then(response => {
+        // figure out what we have to do
+        const toRemove = _.filter(response, x => !_.some(data, d => d[referenceKey] === x[referenceKey]));
+        const toAdd = _.filter(data, d => !_.some(response, x => x[referenceKey] === d[referenceKey]));
+
+        // do it
+        const toDo = [
+          ...toRemove.map(x => this.db.update(source.reference, x.id, {[modelId]: null})),
+          ...toAdd.map(x => this.db.update(source.reference, x.id, {[modelId]: root.id})),
+        ];
+
+        Promise.all(toDo)
+          .then(res.send())
+          .catch(err => this.handleError(res, err));
+      })
+      .catch(err => this.handleError(res, err));
   }
 
   updateMtoM(res, root, source, data) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {ControlLabel} from 'react-bootstrap';
 import {makeTitle} from '../../shared/services';
 
@@ -57,23 +57,25 @@ const editMap = {
   [DATE]: editDate,
 };
 
-export const editValue = (item, key, schema) => input => {
-  const field = schema.map[key];
-  const renderEdit = editMap[field.type];
-  if (!renderEdit) {
-    return null;
+export class EditValue extends Component {
+  render() {
+    const {input, meta: {item, key, schema}} = this.props;
+
+    const field = schema.map[key];
+    const renderEdit = editMap[field.type];
+    if (!renderEdit) {
+      return null;
+    }
+
+    const label = makeTitle(field.title || key, {plural: false});
+    return (
+      <div>
+        <ControlLabel>{label}</ControlLabel>
+        {renderEdit(item, key, field, input)}
+      </div>
+    );
   }
+}
 
-  const label = makeTitle(key, {plural: false});
-  return (
-    <div>
-      <ControlLabel>{label}</ControlLabel>
-      {renderEdit(item, key, field, input)}
-    </div>
-  );
-};
-
-export default {
-  renderValue,
-  editValue,
-};
+// this is here to satisfy the file generator
+export default {};
