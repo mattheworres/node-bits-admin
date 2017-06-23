@@ -2,7 +2,7 @@ import {createSelector} from 'reselect';
 import {allSchemaSelector} from '../../schema/selectors';
 
 export default createSelector(allSchemaSelector, schema => {
-  const items = schema.map(item => item.model);
+  const items = schema.map(item => item.title || item.model);
   items.sort();
 
   return items;
