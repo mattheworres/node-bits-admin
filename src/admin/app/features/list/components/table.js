@@ -70,7 +70,7 @@ class ModelTable extends Component {
 
             return (
               <td key={`${index}-${key}`}>
-                {renderValue(item, key, prop)}
+                {renderValue(item, key, prop, schema)}
               </td>
             );
           })

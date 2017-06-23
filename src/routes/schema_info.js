@@ -15,7 +15,9 @@ const mapFields = (schema, config) =>
 
 const mapSchema = (schema, models) =>
   _.reduce(schema, (result, value, key) => {
+
     const config = _.find(models, m => m.model === key);
+
     if (!config) {
       return [
         ...result,

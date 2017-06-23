@@ -1,11 +1,23 @@
 import _ from 'lodash';
 import {post, put} from 'truefit-react-utils';
 import {referencesForModel} from '../services';
-import {ONE_TO_MANY, MANY_TO_MANY} from '../../shared/constants';
+import {ONE_TO_MANY, MANY_TO_MANY, MEDIA} from '../../shared/constants';
 
 export const SAVE_MODEL = 'SAVE_MODEL';
 
+const hasMedia = schema =>
+  _.some(schema.map, value => value.type === MEDIA);
+
 const saveTheModel = (schema, model) => {
+  if (hasMedia(schema)) {
+    const data = new FormData();
+    _.forOwn(model, (value, prop) => {
+      data.append(prop, value);
+    });
+
+    return post(schema.model, data, {'Content-Type': 'multipart/form-data'});
+  }
+
   const method = model.id ? put : post;
   return method(schema.model, model);
 };

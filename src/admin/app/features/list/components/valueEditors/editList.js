@@ -7,7 +7,7 @@ import Select from 'react-select';
 
 import {loadData} from '../../../data/actions';
 import {listDataSelector} from '../../selectors';
-import {ONE_TO_ONE} from '../../../shared/constants';
+import {ONE_TO_ONE, MANY_TO_ONE, ONE_TO_MANY, MANY_TO_MANY} from '../../../shared/constants';
 
 class EditList extends Component {
   constructor(props) {
@@ -83,12 +83,16 @@ class EditList extends Component {
 
   render() {
     const {schema: {source}} = this.props;
+    const renderMap = {
+      [ONE_TO_ONE]: this.renderEdit1To1,
+      [MANY_TO_ONE]: this.renderEdit1To1,
 
-    if (source.type === ONE_TO_ONE) {
-      return this.renderEdit1To1();
-    }
+      [ONE_TO_MANY]: this.renderEditNtoM,
+      [MANY_TO_MANY]: this.renderEditNtoM,
+    };
 
-    return this.renderEditNtoM();
+    const render = renderMap[source.type];
+    return render ? render() : null;
   }
 }
 

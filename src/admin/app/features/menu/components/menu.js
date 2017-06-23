@@ -34,7 +34,7 @@ class Menu extends Component {
   render() {
     return (
       <div className="menu">
-        <h4>Models</h4>
+        <h4>Menu</h4>
         <Nav stacked activeKey={this.props.activeKey} onSelect={this.handleSelect}>
           {this.renderItems()}
         </Nav>

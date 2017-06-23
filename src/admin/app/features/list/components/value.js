@@ -3,15 +3,16 @@ import {ControlLabel} from 'react-bootstrap';
 import {makeTitle} from '../../shared/services';
 
 import {
-  STRING, TEXT, UUID, PASSWORD, BOOLEAN, INTEGER, DOUBLE, DECIMAL, FLOAT, LIST, DATE,
+  STRING, TEXT, UUID, PASSWORD, BOOLEAN, INTEGER, DOUBLE, DECIMAL, FLOAT, LIST, DATE, TIME,
+  MEDIA,
 } from '../../shared/constants';
 
 import {
-  renderString, renderBoolean, renderNumber, renderList, renderDate,
+  renderString, renderBoolean, renderNumber, renderList, renderDate, renderMedia,
 } from './valueRenderers';
 
 import {
-  editString, editNumber, editBoolean, editDate, editList,
+  editString, editNumber, editBoolean, editDate, editList, editMedia,
 } from './valueEditors';
 
 // render value
@@ -31,11 +32,14 @@ const renderMap = {
   [LIST]: renderList,
 
   [DATE]: renderDate,
+  [TIME]: renderDate,
+
+  [MEDIA]: renderMedia,
 };
 
-export const renderValue = (item, key, schema) => {
+export const renderValue = (item, key, schema, fullSchema) => {
   const render = renderMap[schema.type];
-  return render ? render(item, key, schema) : null;
+  return render ? render(item, key, schema, fullSchema) : null;
 };
 
 // edit value
@@ -55,6 +59,9 @@ const editMap = {
   [LIST]: editList,
 
   [DATE]: editDate,
+  [TIME]: editDate,
+
+  [MEDIA]: editMedia,
 };
 
 export class EditValue extends Component {

@@ -1,8 +1,8 @@
 import React from 'react';
 import {makeTitle} from '../../../shared/services';
-import {ONE_TO_ONE} from '../../../shared/constants';
+import {ONE_TO_ONE, ONE_TO_MANY, MANY_TO_MANY, MANY_TO_ONE} from '../../../shared/constants';
 
-const render1to1 = (item, itemKey, source) => (
+const render1To1 = (item, itemKey, source) => (
   <span>{item[source.reference][source.referenceDisplay]}</span>
 );
 
@@ -25,11 +25,16 @@ const renderNToM = (item, itemKey, source) => {
 const RenderList = ({item, itemKey, schema}) => {
   const {source} = schema;
 
-  if (source.type === ONE_TO_ONE) {
-    return render1to1(item, itemKey, source);
-  }
+  const renderMap = {
+    [ONE_TO_ONE]: render1To1,
+    [MANY_TO_ONE]: render1To1,
 
-  return renderNToM(item, itemKey, source);
+    [ONE_TO_MANY]: renderNToM,
+    [MANY_TO_MANY]: renderNToM,
+  };
+
+  const render = renderMap[source.type];
+  return render ? render(item, itemKey, source) : null;
 };
 
 export default (item, key, schema) => (
