@@ -27,8 +27,8 @@ const adminSpa = {
   },
 };
 
-export default config => {
-  const adminRoot = config.admin || '/admin';
+export default () => {
+  const adminRoot = '/admin';
   return [
     {
       verb: GET,

@@ -24,7 +24,7 @@ class Menu extends Component {
     return this.props.items.map(item => {
       const text = makeTitle(item);
       return (
-        <LinkContainer key={item} to={`/list/${item}`}>
+        <LinkContainer key={item} to={`/admin/list/${item}`}>
           <NavItem eventKey={item}>{text}</NavItem>
         </LinkContainer>
       );

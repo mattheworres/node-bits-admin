@@ -73,7 +73,7 @@ export default {
         },
       },
       {
-        test: /\.scss$/,
+        test: /(\.css|\.scss)$/,
         use: ExtractTextPlugin.extract({
           use: [
             {

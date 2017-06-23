@@ -7,7 +7,7 @@ const defaultSecurity = {
 };
 
 export default config => {
-  const admin = config.admin || '/admin';
+  const admin = '/admin';
   const security = {...defaultSecurity, ...(config.security || {})};
 
   return {

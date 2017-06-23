@@ -7,7 +7,7 @@ import {List} from './features/list/components';
 import {NotFound} from './features/shared/components';
 
 export default (
-  <Route path="/" component={App}>
+  <Route path="/admin" component={App}>
     <IndexRoute component={Admin} />
     <Route path="" component={Admin}>
       <Route path="list/:model" component={List} />
