@@ -21,11 +21,14 @@ class Menu extends Component {
 
   // render
   renderItems() {
+    console.log(this.props.items);
+
     return this.props.items.map(item => {
-      const text = makeTitle(item);
+      const key = item.model;
+      const text = makeTitle(item.title || item.model);
       return (
-        <LinkContainer key={item} to={`/admin/list/${item}`}>
-          <NavItem eventKey={item}>{text}</NavItem>
+        <LinkContainer key={key} to={`/admin/list/${key}`}>
+          <NavItem eventKey={key}>{text}</NavItem>
         </LinkContainer>
       );
     });

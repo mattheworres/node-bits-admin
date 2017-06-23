@@ -69,7 +69,7 @@ class List extends Component {
       <div className="list">
         {this.renderNewButton()}
 
-        <h1>{makeTitle(model)}</h1>
+        <h1>{makeTitle(schema.title || model)}</h1>
 
         <Table data={data} schema={schema} />
         <EditModal />
