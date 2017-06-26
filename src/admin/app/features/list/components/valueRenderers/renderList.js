@@ -3,11 +3,11 @@ import {makeTitle} from '../../../shared/services';
 import {ONE_TO_ONE, ONE_TO_MANY, MANY_TO_MANY, MANY_TO_ONE} from '../../../shared/constants';
 
 const render1To1 = (item, itemKey, source) => (
-  <span>{item[source.reference][source.referenceDisplay]}</span>
+  <span>{item[source.referenceField][source.referenceDisplay]}</span>
 );
 
 const renderNToM = (item, itemKey, source) => {
-  const values = item[itemKey] || [];
+  const values = item[source.referenceField] || [];
 
   if (values.length > 0 && values.length <= 3) {
     return (
@@ -18,7 +18,7 @@ const renderNToM = (item, itemKey, source) => {
   }
 
   return (
-    <span>{values.length} {makeTitle(itemKey).toLowerCase()}</span>
+    <span>{values.length} {makeTitle(source.title || itemKey).toLowerCase()}</span>
   );
 };
 

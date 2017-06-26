@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 
 import {Menu} from '../../menu/components';
 import {Login} from '../../auth/components';
-import {userSelector} from '../../auth/selectors';
+import {userSelector, loginInfoSelector} from '../../auth/selectors';
+
+const loginRequired = (auth, loginInfo) => loginInfo.required && !auth;
 
 const renderLogin = () => (
   <Row>
@@ -25,11 +27,13 @@ const renderAdmin = children => (
   </Row>
 );
 
-const admin = ({auth, children}) => (auth ? renderAdmin(children) : renderLogin());
+const admin = ({auth, loginInfo, children}) =>
+  (loginRequired(auth, loginInfo) ? renderLogin() : renderAdmin(children));
 
 const mapStateToProps = state =>
 ({
   auth: userSelector(state),
+  loginInfo: loginInfoSelector(state),
 });
 
 export default connect(mapStateToProps)(admin);

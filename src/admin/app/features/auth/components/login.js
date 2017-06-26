@@ -5,17 +5,13 @@ import {reduxForm, Field} from 'redux-form';
 import autobind from 'class-autobind';
 import {ControlLabel, FormControl, Button} from 'react-bootstrap';
 
-import {login, loadLoginInfo} from '../actions';
+import {login} from '../actions';
 import {loginInfoSelector} from '../selectors';
 
 class Login extends Component {
   constructor(props) {
     super(props);
     autobind(this);
-  }
-
-  componentWillMount() {
-    this.props.loadLoginInfo();
   }
 
   handleLogin(form) {
@@ -59,4 +55,4 @@ const mapStateToProps = state =>
   loginInfo: loginInfoSelector(state),
 });
 
-export default connect(mapStateToProps, {login, loadLoginInfo})(form);
+export default connect(mapStateToProps, {login})(form);

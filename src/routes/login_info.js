@@ -1,6 +1,7 @@
 import {GET} from 'node-bits';
 
 const defaultSecurity = {
+  required: true,
   username: 'username',
   password: 'password',
   expiresIn: {days: 1},

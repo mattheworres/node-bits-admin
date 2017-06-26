@@ -21,8 +21,6 @@ class Menu extends Component {
 
   // render
   renderItems() {
-    console.log(this.props.items);
-
     return this.props.items.map(item => {
       const key = item.model;
       const text = makeTitle(item.title || item.model);

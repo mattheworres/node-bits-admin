@@ -1,17 +1,50 @@
 import _ from 'lodash';
-import {GET, READ_WRITE, HIDDEN} from 'node-bits';
+import {GET, READ_WRITE, HIDDEN, LIST, MANY_TO_MANY} from 'node-bits';
+import pluralize from 'pluralize';
 
-const mapFields = (schema, config) =>
-  _.reduce(schema, (result, value, key) => {
-    const fieldConfig = config.map ? config.map[key] || {} : {};
+const mapListField = (key, schemaConfig, modelConfig) => {
+  const reference = key.replace('Id', '');
+
+  let field = reference;
+  if (modelConfig.source.type === MANY_TO_MANY) {
+    field = pluralize(field);
+  }
+
+  return {
+    ...schemaConfig,
+    ...modelConfig,
+
+    source: {
+      reference,
+      referenceKey: 'id',
+      referenceDisplay: 'name',
+      referenceField: field,
+
+      ...modelConfig.source,
+    },
+  };
+};
+
+const mapField = (key, schemaConfig, modelConfig) => {
+  if (modelConfig.type === LIST) {
+    return mapListField(key, schemaConfig, modelConfig);
+  }
+
+  return {
+    ...schemaConfig,
+    ...modelConfig,
+  };
+};
+
+const mapFields = (keys, schema, configMap) =>
+  _.reduce(keys, (result, key) => {
+    const schemaConfig = schema[key];
+    const modelConfig = configMap ? configMap[key] || {} : {};
     return {
       ...result,
-      [key]: {
-        ...value,
-        ...fieldConfig,
-      },
+      [key]: mapField(key, schemaConfig, modelConfig),
     };
-  }, config.map);
+  }, {});
 
 const mapSchema = (schema, models) =>
   _.reduce(schema, (result, value, key) => {
@@ -34,12 +67,16 @@ const mapSchema = (schema, models) =>
       return result;
     }
 
+    const configMap = config.map || {};
+    const allKeys = _.uniq([..._.keys(value), ..._.keys(configMap)]);
+    const order = config.order || allKeys;
+
     return [
       ...result,
       {
         ...config,
-        map: mapFields(value, config),
-        order: config.order || _.keys(value),
+        map: mapFields(order, value, configMap),
+        order,
       },
     ];
   }, []);

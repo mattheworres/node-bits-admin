@@ -29,7 +29,7 @@ class EditList extends Component {
   loadData(props) {
     const {loadData, schema: {source}} = props;
 
-    loadData(source.reference);
+    loadData(source.reference, null, [source.referenceKey, source.referenceDisplay]);
   }
 
   // actions
