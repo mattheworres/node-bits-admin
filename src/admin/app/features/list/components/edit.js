@@ -47,7 +47,7 @@ class EditModal extends Component {
         <Modal.Header closeButton>
           <Modal.Title>
             {model ? 'Edit ' : 'New '}
-            {makeTitle(schema.model, {plural: false})}
+            {makeTitle(schema.title || schema.model, {plural: false})}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

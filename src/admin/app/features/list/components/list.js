@@ -54,7 +54,7 @@ class List extends Component {
 
     return (
       <Button bsStyle="success" className="pull-right" onClick={this.handleNewModel}>
-        <FontAwesome name="plus-circle" /> &nbsp;New {makeTitle(model, {plural: false})}
+        <FontAwesome name="plus-circle" /> &nbsp;New {makeTitle(schema.title || model, {plural: false})}
       </Button>
     );
   }

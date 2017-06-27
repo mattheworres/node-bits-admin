@@ -56,7 +56,11 @@ const mapFields = (keys, schema, configMap) =>
       ...result,
       [key]: mapField(key, schemaConfig, modelConfig),
     };
-  }, {});
+  }, {
+    id: {
+      mode: HIDDEN,
+    },
+  });
 
 const mapSchema = (schema, models) =>
   _.reduce(schema, (result, value, key) => {
