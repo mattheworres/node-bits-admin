@@ -4,6 +4,7 @@ import {reduxForm, Field} from 'redux-form';
 import autobind from 'class-autobind';
 
 import {EditValue} from './value';
+import {EDIT_DISPLAY_MODES} from '../../shared/constants';
 
 class EditForm extends Component {
   constructor(props) {
@@ -33,7 +34,12 @@ class EditForm extends Component {
   // render
   renderForm() {
     const {schema, model} = this.props;
-    return _.map(schema.order, key => (
+    const keys = schema.order.filter(key => {
+      const field = schema.map[key];
+      return EDIT_DISPLAY_MODES.includes(field.mode);
+    });
+
+    return _.map(keys, key => (
       <Field key={key} name={key} component={EditValue} meta={{model, key, schema}} />
     ));
   }

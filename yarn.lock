@@ -1907,9 +1907,9 @@ nested-error-stacks@^1.0.0:
   dependencies:
     inherits "~2.0.1"
 
-node-bits@^0.0.26:
-  version "0.0.26"
-  resolved "https://registry.yarnpkg.com/node-bits/-/node-bits-0.0.26.tgz#8f7bec5359f00f6de05d7d5fe38a589a6ad9eaa1"
+node-bits@^0.0.27:
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/node-bits/-/node-bits-0.0.27.tgz#870cef7d83791cbd51094476eb851df0735470c1"
   dependencies:
     chalk "^1.1.3"
     lodash "^4.17.4"

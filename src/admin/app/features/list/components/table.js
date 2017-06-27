@@ -7,7 +7,7 @@ import autobind from 'class-autobind';
 import {editModel} from '../actions';
 import {deleteModel} from '../../data/actions';
 import {makeTitle} from '../../shared/services';
-import {READ_ONLY} from '../../shared/constants';
+import {LIST_DISPLAY_MODES, READ_ONLY} from '../../shared/constants';
 
 import OptionsGear from './optionsGear';
 import {renderValue} from './value';
@@ -29,6 +29,14 @@ class ModelTable extends Component {
     deleteModel(schema, item.id);
   }
 
+  // helpers
+  fields() {
+    const {schema} = this.props;
+    const fields = schema.order.map(key => ({key, ...schema.map[key]}));
+
+    return fields.filter(field => LIST_DISPLAY_MODES.includes(field.mode));
+  }
+
   // render
   renderGear(index, item) {
     const {schema} = this.props;
@@ -43,14 +51,12 @@ class ModelTable extends Component {
   }
 
   renderHeader() {
-    const {schema} = this.props;
-
     return (
       <tr>
         {
-          _.map(schema.order, key => (
-            <th key={key}>
-              {makeTitle(schema.map[key].title || key, {plural: false})}
+          _.map(this.fields(), field => (
+            <th key={field.key}>
+              {makeTitle(field.title || field.key, {plural: false})}
             </th>
           ))
         }
@@ -65,15 +71,11 @@ class ModelTable extends Component {
     return data.map((item, index) => (
       <tr key={index}>
         {
-          _.map(schema.order, key => {
-            const prop = schema.map[key];
-
-            return (
-              <td key={`${index}-${key}`}>
-                {renderValue(item, key, prop, schema)}
-              </td>
-            );
-          })
+          _.map(this.fields(), field => (
+            <td key={`${index}-${field.key}`}>
+              {renderValue(item, field.key, field, schema)}
+            </td>
+            ))
         }
         <td key={`${index}-options`}>
           {this.renderGear(index, item)}

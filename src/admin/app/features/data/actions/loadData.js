@@ -1,23 +1,45 @@
+import _ from 'lodash';
 import {get} from 'truefit-react-utils';
 import {referencesForModel} from '../services';
+import {SELECT_MODES} from '../../shared/constants';
 
-const buildUrl = (model, schema, select) => {
-  const references = referencesForModel(schema);
-
-  let expand = null;
-  if (references.length > 0) {
-    expand = `expand=${references.map(r => r.source.referenceField).join(',')}`;
-
-    // TODO: probably need to build out the select for all the order and the key, display
+const buildSelect = (model, schema, override, references) => {
+  if (override) {
+    return override;
   }
 
-  let url = model;
+  const fields = _.filter(schema.map, (field, key) => {
+    field.key = key;
+    return SELECT_MODES.includes(field.mode);
+  });
+  const relatedFields = _.flatMap(references, ({source}) =>
+    [`${source.referenceField}.${source.referenceKey}`, `${source.referenceField}.${source.referenceDisplay}`]);
+
+  const allFields = _.flatten([
+    ...fields.map(field => field.key),
+    ...relatedFields,
+  ]);
+
+  return allFields.join(',');
+};
+
+const buildExpand = (model, schema, references) =>
+  `expand=${references.map(r => r.source.referenceField).join(',')}`;
+
+const buildUrl = (model, schema, selectOverride) => {
+  const allReferences = referencesForModel(schema);
+  const references = allReferences.filter(r => SELECT_MODES.includes(r.mode));
+
+  const select = buildSelect(model, schema, selectOverride, references);
+  const expand = buildExpand(model, schema, references);
+
+  let url = `${model}?`;
   if (expand) {
-    url = `${url}?${expand}`;
+    url = `${url}${expand}`;
   }
 
   if (select) {
-    url = `${url}${expand ? '&' : '?'}select=${select.join(',')}`;
+    url = `${url}${expand ? '&' : ''}select=${select}`;
   }
 
   return url;

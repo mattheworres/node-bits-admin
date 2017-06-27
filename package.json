@@ -23,7 +23,7 @@
   "keywords": "node-bits,node,microframework,schema,routes",
   "dependencies": {
     "lodash": "^4.17.4",
-    "node-bits": "^0.0.26"
+    "node-bits": "^0.0.27"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",

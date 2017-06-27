@@ -1,5 +1,7 @@
 export const HIDDEN = 'HIDDEN';
 export const READ_ONLY = 'READ_ONLY';
+export const READ_WRITE = 'READ_WRITE';
+export const WRITE_ONLY = 'WRITE_ONLY';
 
 export const ONE_TO_ONE = 'ONE_TO_ONE';
 export const ONE_TO_MANY = 'ONE_TO_MANY';
@@ -20,3 +22,7 @@ export const TEXT = 'TEXT';
 export const LIST = 'LIST';
 export const MEDIA = 'MEDIA';
 export const RICH_TEXT = 'RICH_TEXT';
+
+export const LIST_DISPLAY_MODES = [READ_ONLY, READ_WRITE];
+export const EDIT_DISPLAY_MODES = [WRITE_ONLY, READ_WRITE];
+export const SELECT_MODES = [READ_ONLY, WRITE_ONLY, READ_WRITE];

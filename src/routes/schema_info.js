@@ -1,36 +1,48 @@
 import _ from 'lodash';
-import {GET, READ_WRITE, HIDDEN, LIST, MANY_TO_MANY} from 'node-bits';
+import {
+  GET, READ_WRITE, HIDDEN, LIST,
+  MANY_TO_MANY, ONE_TO_MANY, ONE_TO_ONE, MANY_TO_ONE,
+} from 'node-bits';
 import pluralize from 'pluralize';
 
-const mapListField = (key, schemaConfig, modelConfig) => {
-  const reference = key.replace('Id', '');
+const mapListFieldSource = (key, schemaConfig, modelConfig) => {
+  let reference = key;
+  let field = key;
 
-  let field = reference;
-  if (modelConfig.source.type === MANY_TO_MANY) {
-    field = pluralize(field);
+  switch (modelConfig.source.type) {
+    case MANY_TO_MANY:
+    case ONE_TO_MANY:
+      reference = pluralize.singular(key);
+      break;
+
+    case ONE_TO_ONE:
+    case MANY_TO_ONE:
+      reference = key.replace('Id', '');
+      field = reference;
+      break;
+
+    default:
+      break;
   }
 
   return {
-    ...schemaConfig,
-    ...modelConfig,
+    reference,
+    referenceKey: 'id',
+    referenceDisplay: 'name',
+    referenceField: field,
 
-    source: {
-      reference,
-      referenceKey: 'id',
-      referenceDisplay: 'name',
-      referenceField: field,
-
-      ...modelConfig.source,
-    },
+    ...modelConfig.source,
   };
 };
 
 const mapField = (key, schemaConfig, modelConfig) => {
   if (modelConfig.type === LIST) {
-    return mapListField(key, schemaConfig, modelConfig);
+    modelConfig.source = mapListFieldSource(key, schemaConfig, modelConfig);
   }
 
   return {
+    mode: READ_WRITE,
+
     ...schemaConfig,
     ...modelConfig,
   };
@@ -39,7 +51,7 @@ const mapField = (key, schemaConfig, modelConfig) => {
 const mapFields = (keys, schema, configMap) =>
   _.reduce(keys, (result, key) => {
     const schemaConfig = schema[key];
-    const modelConfig = configMap ? configMap[key] || {} : {};
+    const modelConfig = configMap[key] || {};
     return {
       ...result,
       [key]: mapField(key, schemaConfig, modelConfig),
@@ -57,7 +69,7 @@ const mapSchema = (schema, models) =>
         {
           model: key,
           mode: READ_WRITE,
-          map: value,
+          map: mapFields(_.keys(value), value, {}),
           order: _.keys(value),
         },
       ];
