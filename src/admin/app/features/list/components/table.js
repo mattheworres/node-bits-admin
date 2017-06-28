@@ -2,9 +2,11 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Table} from 'react-bootstrap';
+import SweetAlert from 'react-bootstrap-sweetalert';
 import autobind from 'class-autobind';
 
-import {editModel} from '../actions';
+import {editModel, promptForDelete, hideDeletePrompt} from '../actions';
+import {deleteModalSelector} from '../selectors';
 import {deleteModel} from '../../data/actions';
 import {makeTitle} from '../../shared/services';
 import {LIST_DISPLAY_MODES, READ_ONLY} from '../../shared/constants';
@@ -25,8 +27,7 @@ class ModelTable extends Component {
   }
 
   handleDelete(item) {
-    const {schema, deleteModel} = this.props;
-    deleteModel(schema, item.id);
+    this.props.promptForDelete(item);
   }
 
   // helpers
@@ -84,18 +85,53 @@ class ModelTable extends Component {
       ));
   }
 
+  renderAlert() {
+    const {schema, deleteModel, deleteModal, hideDeletePrompt} = this.props;
+    if (!deleteModal.shown) {
+      return null;
+    }
+
+    const handleCancel = () => {
+      hideDeletePrompt();
+    };
+
+    const handleDelete = () => {
+      deleteModel(schema, deleteModal.item.id);
+      hideDeletePrompt();
+    };
+
+    const title = `Are your sure you want to delete this ${makeTitle(schema.title || schema.model, {plural: false})}`;
+
+    return (
+      <SweetAlert
+        danger
+        showCancel
+        title={title}
+        onConfirm={handleDelete}
+        onCancel={handleCancel} />
+    );
+  }
+
   render() {
     return (
-      <Table striped>
-        <thead>
-          {this.renderHeader()}
-        </thead>
-        <tbody>
-          {this.renderBody()}
-        </tbody>
-      </Table>
+      <div>
+        <Table striped>
+          <thead>
+            {this.renderHeader()}
+          </thead>
+          <tbody>
+            {this.renderBody()}
+          </tbody>
+        </Table>
+        {this.renderAlert()}
+      </div>
     );
   }
 }
 
-export default connect(null, {editModel, deleteModel})(ModelTable);
+const mapStateToProps = state =>
+({
+  deleteModal: deleteModalSelector(state),
+});
+
+export default connect(mapStateToProps, {editModel, deleteModel, promptForDelete, hideDeletePrompt})(ModelTable);
