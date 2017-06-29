@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.user !== this.props.user) {
+    if (nextProps.user && nextProps.user !== this.props.user) {
       this.props.loadSchema();
       return;
     }

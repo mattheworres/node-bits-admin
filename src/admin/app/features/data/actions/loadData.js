@@ -1,7 +1,9 @@
 import _ from 'lodash';
 import {get} from 'truefit-react-utils';
+
 import {referencesForModel} from '../services';
 import {SELECT_MODES} from '../../shared/constants';
+import {logout} from '../../auth/actions';
 
 const buildSelect = (model, schema, override, references) => {
   if (override) {
@@ -46,11 +48,24 @@ const buildUrl = (model, schema, selectOverride) => {
 };
 
 export const LOAD_DATA = 'LOAD_DATA';
-export const loadData = (model, schema, select) => ({
-  type: LOAD_DATA,
-  payload: get(buildUrl(model, schema, select))
-            .then(payload => ({
-              model,
-              data: payload.data,
-            })),
-});
+export const loadData = (model, schema, select) => dispatch => {
+  const url = buildUrl(model, schema, select);
+
+  get(url)
+  .then(payload => {
+    dispatch({
+      type: LOAD_DATA,
+      payload: {
+        model,
+        data: payload.data,
+      },
+    });
+  })
+  .catch(err => {
+    if (err && err.response && err.response.status === 403) {
+      dispatch(logout());
+    } else {
+      throw err;
+    }
+  });
+};

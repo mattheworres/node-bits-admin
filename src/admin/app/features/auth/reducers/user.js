@@ -1,6 +1,7 @@
-import {promiseReducer} from 'truefit-react-utils';
-import {LOGIN} from '../actions';
+import {stateReducer} from 'truefit-react-utils';
+import {LOGIN, LOGOUT} from '../actions';
 
-export default promiseReducer(LOGIN, null, {
-  FULFILLED: (state, payload) => payload.data,
+export default stateReducer(null, {
+  [`${LOGIN}_FULFILLED`]: (state, payload) => payload.data,
+  [LOGOUT]: () => null,
 });
