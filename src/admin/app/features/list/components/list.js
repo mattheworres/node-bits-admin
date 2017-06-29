@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import autobind from 'class-autobind';
 import {Button} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
+import {RingLoader} from 'halogen';
 
 import Table from './table';
 import EditModal from './edit';
@@ -59,10 +60,18 @@ class List extends Component {
     );
   }
 
+  renderLoading() {
+    return (
+      <div className="list-loading">
+        <RingLoader color="#000" />
+      </div>
+    );
+  }
+
   render() {
     const {data, schema, model} = this.props;
     if (!data || !schema) {
-      return null;
+      return this.renderLoading();
     }
 
     return (

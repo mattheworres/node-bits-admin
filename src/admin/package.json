@@ -25,6 +25,7 @@
     "classnames": "^2.2.5",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
+    "halogen": "^0.2.0",
     "humanize-plus": "^1.8.2",
     "immutable": "^3.8.1",
     "jquery": "^3.2.1",
