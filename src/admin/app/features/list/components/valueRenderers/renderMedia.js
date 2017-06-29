@@ -2,14 +2,22 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {API_BASE_URL} from 'configs'; // eslint-disable-line
 
-import {userSelector} from '../../../auth/selectors';
+import {userSelector, loginInfoSelector} from '../../../auth/selectors';
 
-const image = ({url, user}) => (
-  <img src={`${url}&token=${user.token}`} />
-);
+const image = ({url, user, loginInfo}) => {
+  let src = url;
+  if (loginInfo.required) {
+    src = `${url}&token=${user.token}`;
+  }
+
+  return (
+    <img src={src} />
+  );
+};
 
 const ConnectedImage = connect(state =>
 ({
+  loginInfo: loginInfoSelector(state),
   user: userSelector(state),
 }))(image);
 
