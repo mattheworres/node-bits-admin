@@ -1,15 +1,15 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Table} from 'react-bootstrap';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import autobind from 'class-autobind';
+import {AutoSizer, Column, Table, SortIndicator} from 'react-virtualized';
 
-import {editModel, promptForDelete, hideDeletePrompt} from '../actions';
-import {deleteModalSelector} from '../selectors';
+import {editModel, promptForDelete, hideDeletePrompt, sortList} from '../actions';
+import {sortSelector, deleteModalSelector} from '../selectors';
 import {deleteModel} from '../../data/actions';
-import {makeTitle} from '../../shared/services';
-import {LIST_DISPLAY_MODES, READ_ONLY} from '../../shared/constants';
+import {makeTitle, getAtIndex, rowClassName, sortData} from '../../shared/services';
+import {LIST_DISPLAY_MODES, READ_ONLY, HEADER_HEIGHT, ROW_HEIGHT} from '../../shared/constants';
 
 import OptionsGear from './optionsGear';
 import {renderValue} from './value';
@@ -30,6 +30,10 @@ class ModelTable extends Component {
     this.props.promptForDelete(item);
   }
 
+  onSort({sortBy, sortDirection}) {
+    this.props.sortList(sortBy, sortDirection);
+  }
+
   // helpers
   fields() {
     const {schema} = this.props;
@@ -39,52 +43,6 @@ class ModelTable extends Component {
   }
 
   // render
-  renderGear(index, item) {
-    const {schema} = this.props;
-
-    if (schema.mode === READ_ONLY) {
-      return null;
-    }
-
-    return (
-      <OptionsGear index={index} item={item} onEdit={this.handleEdit} onDelete={this.handleDelete} />
-    );
-  }
-
-  renderHeader() {
-    return (
-      <tr>
-        {
-          _.map(this.fields(), field => (
-            <th key={field.key}>
-              {makeTitle(field.title || field.key, {plural: false})}
-            </th>
-          ))
-        }
-        <th key="options" />
-      </tr>
-    );
-  }
-
-  renderBody() {
-    const {schema, data} = this.props;
-
-    return data.map((item, index) => (
-      <tr key={index}>
-        {
-          _.map(this.fields(), field => (
-            <td key={`${index}-${field.key}`}>
-              {renderValue(item, field.key, field, schema)}
-            </td>
-            ))
-        }
-        <td key={`${index}-options`}>
-          {this.renderGear(index, item)}
-        </td>
-      </tr>
-      ));
-  }
-
   renderAlert() {
     const {schema, deleteModel, deleteModal, hideDeletePrompt} = this.props;
     if (!deleteModal.shown) {
@@ -112,17 +70,81 @@ class ModelTable extends Component {
     );
   }
 
-  render() {
+  renderNoData() {
+    return (<div className="no-rows"><h3>No data available</h3></div>);
+  }
+
+  renderGear({dataKey, rowData}) {
+    return <OptionsGear index={dataKey} item={rowData} onEdit={this.handleEdit} onDelete={this.handleDelete} />;
+  }
+
+  renderHeader({dataKey, label, sortBy, sortDirection}) {
     return (
       <div>
-        <Table striped>
-          <thead>
-            {this.renderHeader()}
-          </thead>
-          <tbody>
-            {this.renderBody()}
-          </tbody>
-        </Table>
+        {label}
+        {sortBy === dataKey && <SortIndicator sortDirection={sortDirection} />}
+      </div>
+    );
+  }
+
+  renderColumns(width) {
+    const {schema} = this.props;
+    const fields = this.fields();
+
+    const gearKey = 'gear-options';
+    const gearWidth = 30;
+    const columnWidth = (width - gearWidth) / fields.length;
+
+    const valueRenderer = ({dataKey, rowData}) => {
+      const field = schema.map[dataKey];
+
+      return renderValue(rowData, dataKey, field, schema);
+    };
+
+    const columns = _.map(fields, field => {
+      const title = makeTitle(field.title || field.key, {plural: false});
+      return (
+        <Column key={field.key} dataKey={field.key} width={columnWidth} flexGrow={1} label={title} cellRenderer={valueRenderer} headerRenderer={this.renderHeader} />
+      );
+    });
+
+    if (schema.mode === READ_ONLY) {
+      return columns;
+    }
+
+    columns.push(
+      <Column key={gearKey} dataKey={gearKey} width={gearWidth} flexGrow={0} label="" cellRenderer={this.renderGear} />
+    );
+
+    return columns;
+  }
+
+  render() {
+    const {data, sort} = this.props;
+
+    return (
+      <div className="no-select">
+        <AutoSizer disableHeight>
+          {
+            ({width}) =>
+              (<Table
+                _data={sortData(data, sort)}
+                width={width}
+                height={HEADER_HEIGHT + ROW_HEIGHT * data.length}
+                headerHeight={HEADER_HEIGHT}
+                rowHeight={ROW_HEIGHT}
+
+                rowCount={data.length}
+                rowGetter={getAtIndex(data)}
+                rowClassName={rowClassName}
+                sortBy={sort.sortBy}
+                sortDirection={sort.sortDirection}
+                sort={this.onSort}
+                noRowsRenderer={this.renderNoData}>
+                {this.renderColumns(width)}
+              </Table>)
+          }
+        </AutoSizer>
         {this.renderAlert()}
       </div>
     );
@@ -131,7 +153,8 @@ class ModelTable extends Component {
 
 const mapStateToProps = state =>
 ({
+  sort: sortSelector(state),
   deleteModal: deleteModalSelector(state),
 });
 
-export default connect(mapStateToProps, {editModel, deleteModel, promptForDelete, hideDeletePrompt})(ModelTable);
+export default connect(mapStateToProps, {editModel, deleteModel, promptForDelete, hideDeletePrompt, sortList})(ModelTable);

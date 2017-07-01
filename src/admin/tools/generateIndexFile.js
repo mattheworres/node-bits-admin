@@ -20,6 +20,12 @@ export default args => {
         if (err2) throw err2;
 
         files.sort();
+
+        // check if we need to skip this directory
+        if (_.find(files, file => path.basename(file) === '.no-autogenerate')) {
+          return;
+        }
+
         let indexContents = '';
         for (const file of files) {
           if (!/^.+\.js$/.test(file) || /^index\.js$/.test(file)) continue;

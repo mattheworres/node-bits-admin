@@ -4,5 +4,8 @@ import modelsSelector from './modelsSelector';
 import modelSelector from '../../list/selectors/modelSelector';
 
 export default createSelector(modelsSelector, modelSelector,
-  (models, model) => models.getIn([model])
+  (models, model) => {
+    const data = models.getIn([model]);
+    return data ? data.toJS() : [];
+  }
 );
