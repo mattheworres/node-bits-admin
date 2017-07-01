@@ -4,15 +4,15 @@ import {makeTitle} from '../../shared/services';
 
 import {
   STRING, TEXT, UUID, PASSWORD, BOOLEAN, INTEGER, DOUBLE, DECIMAL, FLOAT, LIST, DATE, TIME,
-  MEDIA,
+  MEDIA, RICH_TEXT,
 } from '../../shared/constants';
 
 import {
-  renderString, renderBoolean, renderNumber, renderList, renderDate, renderMedia,
+  renderString, renderBoolean, renderNumber, renderList, renderDate, renderMedia, renderRichText,
 } from './valueRenderers';
 
 import {
-  editString, editNumber, editBoolean, editDate, editList, editMedia,
+  editString, editNumber, editBoolean, editDate, editList, editMedia, editRichText,
 } from './valueEditors';
 
 // render value
@@ -35,6 +35,8 @@ const renderMap = {
   [TIME]: renderDate,
 
   [MEDIA]: renderMedia,
+
+  [RICH_TEXT]: renderRichText,
 };
 
 export const renderValue = (item, key, schema, fullSchema) => {
@@ -62,6 +64,8 @@ const editMap = {
   [TIME]: editDate,
 
   [MEDIA]: editMedia,
+
+  [RICH_TEXT]: editRichText,
 };
 
 export class EditValue extends Component {

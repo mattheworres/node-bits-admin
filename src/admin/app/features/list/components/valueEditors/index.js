@@ -4,3 +4,4 @@ export {default as editBoolean} from './editBoolean';
 export {default as editDate} from './editDate';
 export {default as editList} from './editList';
 export {default as editMedia} from './editMedia';
+export {default as editRichText} from './editRichText';

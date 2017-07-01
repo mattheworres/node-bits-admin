@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import autobind from 'class-autobind';
 import {Button} from 'react-bootstrap';
 import FontAwesome from 'react-fontawesome';
-import {RingLoader} from 'halogen';
+import Spinner from 'react-spinkit';
 
 import Table from './table';
 import EditModal from './edit';
@@ -63,7 +63,7 @@ class List extends Component {
   renderLoading() {
     return (
       <div className="list-loading">
-        <RingLoader color="#000" />
+        <Spinner name="ball-clip-rotate-multiple" color="#000" />
       </div>
     );
   }
