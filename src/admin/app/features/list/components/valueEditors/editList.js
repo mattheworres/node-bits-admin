@@ -43,8 +43,10 @@ class EditList extends Component {
         return;
       }
 
-      input.onChange(args.value);
-      change('edit-modal', source.reference, referenceForValue(args.value));
+      const value = args ? args.value : null;
+
+      input.onChange(value);
+      change('edit-modal', source.reference, value ? referenceForValue(value) : null);
     };
   }
 
@@ -71,7 +73,7 @@ class EditList extends Component {
   renderEdit1To1() {
     const {input} = this.props;
 
-    return this.renderSelect(input.value, false, false);
+    return this.renderSelect(input.value, false, true);
   }
 
   renderEditNtoM() {

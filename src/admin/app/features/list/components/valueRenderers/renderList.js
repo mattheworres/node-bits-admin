@@ -2,9 +2,14 @@ import React from 'react';
 import {makeTitle} from '../../../shared/services';
 import {ONE_TO_ONE, ONE_TO_MANY, MANY_TO_MANY, MANY_TO_ONE} from '../../../shared/constants';
 
-const render1To1 = (item, itemKey, source) => (
-  <span>{item[source.referenceField][source.referenceDisplay]}</span>
-);
+const render1To1 = (item, itemKey, source) => {
+  const relatedItem = item[source.referenceField];
+  const value = relatedItem ? relatedItem[source.referenceDisplay] : null;
+
+  return (
+    <span>{value}</span>
+  );
+};
 
 const renderNToM = (item, itemKey, source) => {
   const values = item[source.referenceField] || [];
