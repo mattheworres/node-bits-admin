@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {BEFORE, AFTER, POST, PUT} from 'node-bits';
+import {BEFORE, POST, PUT} from 'node-bits';
 
 export default class MediaSubscriber {
   constructor(config) {
@@ -13,27 +13,22 @@ export default class MediaSubscriber {
   perform(args) {
     const {req, stage, verb} = args;
 
-    if (![POST, PUT].includes(verb)) {
-      return;
+    if (![POST, PUT].includes(verb) || stage !== BEFORE) {
+      return null;
     }
 
-    if (stage === BEFORE) {
-      _.forEach(_.keys(req.files), key => {
-        const file = req.files[key];
-        req.body[key] = this.storage.store(file, key, args);
+    return Promise.all(_.keys(req.files).map(key => {
+      const file = req.files[key];
+      const storeResult = this.storage.store(file, key, args);
+
+      let promise = Promise.resolve(storeResult);
+      if (storeResult && storeResult.then) {
+        promise = storeResult;
+      }
+
+      return promise.then(value => {
+        req.body[key] = value;
       });
-      return;
-    }
-
-    if (stage === AFTER) {
-      _.forEach(_.keys(req.files), key => {
-        const file = req.files[key];
-        const field = req.body[key];
-
-        if (this.storage.afterStore) {
-          this.storage.afterStore(file, key, field, args);
-        }
-      });
-    }
+    }));
   }
 }

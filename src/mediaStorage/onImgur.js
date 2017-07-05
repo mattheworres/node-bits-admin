@@ -1,32 +1,18 @@
 import imgur from 'imgur';
-import UUID from 'uuid-js';
 import {logError} from 'node-bits';
 
 const defaultUrl = 'https://api.imgur.com/3/';
 
 export default config => ({
-  store: () => UUID.create().toString(),
-
-  afterStore(file, key, field, args) {
-    const {database, name} = args;
+  store: file => {
     const base64 = file.data.toString('base64');
 
     // upload image
     imgur.setClientId(config.clientId);
     imgur.setAPIUrl(config.apiUrl || defaultUrl);
 
-    imgur.uploadBase64(base64)
-      .then(json =>
-        // update the record
-        database.find(name, {[key]: field}).then(records => {
-          const record = records[0];
-          if (!record) {
-            throw new Error(`No '${name}' found with '${key}' set to '${field}' something went wrong`);
-          }
-
-          return database.update(name, record.id, {[key]: json.data.link});
-        }))
-      .catch(logError);
+    return imgur.uploadBase64(base64)
+      .then(json => json.data.link);
   },
 
   getImage: (req, res, db) => {
