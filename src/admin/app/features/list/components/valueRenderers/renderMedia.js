@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {API_BASE_URL} from 'configs'; // eslint-disable-line
+import UUID from 'uuid-js';
 
 import {userSelector, loginInfoSelector} from '../../../auth/selectors';
 
@@ -22,7 +23,8 @@ const ConnectedImage = connect(state =>
 }))(image);
 
 export default (item, key, schema, fullSchema) => {
-  const url = `${API_BASE_URL}media?model=${fullSchema.model}&field=${key}&id=${item.id}`;
+  const bust = UUID.create();
+  const url = `${API_BASE_URL}media?model=${fullSchema.model}&field=${key}&id=${item.id}&bust=${bust}`;
 
   return item[key] ? <ConnectedImage url={url} /> : null;
 };
