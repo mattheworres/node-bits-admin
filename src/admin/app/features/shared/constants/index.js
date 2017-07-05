@@ -15,6 +15,7 @@ export const FLOAT = 'FLOAT';
 export const UUID = 'UUID';
 export const STRING = 'STRING';
 export const PASSWORD = 'PASSWORD';
+export const DATETIME = 'DATETIME';
 export const DATE = 'DATE';
 export const TIME = 'TIME';
 export const BOOLEAN = 'BOOLEAN';
