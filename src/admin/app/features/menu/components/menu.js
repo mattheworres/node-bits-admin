@@ -8,6 +8,8 @@ import {selectMenuItem} from '../actions';
 import {menuItemsSelector, activeKeySelector} from '../selectors';
 import {makeTitle} from '../../shared/services';
 
+import {User} from '../../auth/components';
+
 class Menu extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +37,9 @@ class Menu extends Component {
   render() {
     return (
       <div className="menu">
+        <h4>User</h4>
+        <User />
+
         <h4>Menu</h4>
         <Nav stacked activeKey={this.props.activeKey} onSelect={this.handleSelect}>
           {this.renderItems()}

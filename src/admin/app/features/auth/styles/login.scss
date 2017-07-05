@@ -8,3 +8,17 @@
     margin-bottom: 10px;
   }
 }
+
+.user-display {
+  height: 30px;
+  color: $white;
+
+  .username {
+    margin-left: 15px;
+  }
+
+  .fa {
+    margin-right: 10px;
+    cursor: pointer;
+  }
+}

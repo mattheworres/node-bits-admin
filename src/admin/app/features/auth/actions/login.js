@@ -13,5 +13,9 @@ export const login = (login, loginInfo) =>
               expires: moment().add(loginInfo.expiresIn).toDate(),
             });
             return payload;
+          })
+          .catch(err => {
+            alert('Login Information Incorrect'); // eslint-disable-line
+            throw err;
           }),
 });
