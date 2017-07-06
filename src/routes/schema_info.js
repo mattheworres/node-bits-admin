@@ -73,6 +73,7 @@ const mapSchema = (schema, models) =>
         {
           model: key,
           mode: READ_WRITE,
+          pluralizeTitle: true,
           map: mapFields(_.keys(value), value, {}),
           order: _.keys(value),
         },
@@ -90,6 +91,7 @@ const mapSchema = (schema, models) =>
     return [
       ...result,
       {
+        pluralizeTitle: true,
         ...config,
         map: mapFields(order, value, configMap),
         order,

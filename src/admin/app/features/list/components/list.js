@@ -15,7 +15,7 @@ import {modelSelector} from '../selectors';
 import {modelDataSelector} from '../../data/selectors';
 import {modelSchemaSelector} from '../../schema/selectors';
 
-import {makeTitle} from '../../shared/services';
+import {makeModelTitle, makeTitle} from '../../shared/services';
 import {READ_ONLY} from '../../shared/constants';
 
 class List extends Component {
@@ -69,7 +69,7 @@ class List extends Component {
   }
 
   render() {
-    const {data, schema, model} = this.props;
+    const {data, schema} = this.props;
     if (!data || !schema) {
       return this.renderLoading();
     }
@@ -78,7 +78,7 @@ class List extends Component {
       <div className="list">
         {this.renderNewButton()}
 
-        <h1>{makeTitle(schema.title || model)}</h1>
+        <h1>{makeModelTitle(schema)}</h1>
 
         <Table data={data} schema={schema} />
         <EditModal />

@@ -6,7 +6,7 @@ import {LinkContainer} from 'react-router-bootstrap';
 
 import {selectMenuItem} from '../actions';
 import {menuItemsSelector, activeKeySelector} from '../selectors';
-import {makeTitle} from '../../shared/services';
+import {makeModelTitle} from '../../shared/services';
 
 import {User} from '../../auth/components';
 
@@ -25,7 +25,7 @@ class Menu extends Component {
   renderItems() {
     return this.props.items.map(item => {
       const key = item.model;
-      const text = makeTitle(item.title || item.model);
+      const text = makeModelTitle(item);
       return (
         <LinkContainer key={key} to={`/admin/list/${key}`}>
           <NavItem eventKey={key}>{text}</NavItem>
