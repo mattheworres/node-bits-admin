@@ -14,14 +14,6 @@ const render1To1 = (item, itemKey, source) => {
 const renderNToM = (item, itemKey, source) => {
   const values = item[source.referenceField] || [];
 
-  if (values.length > 0 && values.length <= 3) {
-    return (
-      <span>
-        {values.map(x => x[source.referenceDisplay]).join(', ')}
-      </span>
-    );
-  }
-
   return (
     <span>{values.length} {makeTitle(source.title || itemKey).toLowerCase()}</span>
   );
