@@ -1,6 +1,6 @@
 {
   "name": "node-bits-admin",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "node-bits-admin provides a CMS for your node-bits based api",
   "main": "lib/index.js",
   "scripts": {
@@ -22,6 +22,8 @@
   "homepage": "https://github.com/jgretz/node-bits-admin#readme",
   "keywords": "node-bits,node,microframework,schema,routes",
   "dependencies": {
+    "ajv": "^5.2.0",
+    "ajv-errors": "^1.0.0",
     "imagemin": "^5.3.1",
     "imagemin-jpegtran": "^5.0.2",
     "imagemin-pngquant": "^5.0.1",

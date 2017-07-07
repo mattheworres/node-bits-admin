@@ -3,7 +3,9 @@ import {post, put} from 'truefit-react-utils';
 import {referencesForModel} from '../services';
 import {ONE_TO_MANY, MANY_TO_MANY, MEDIA} from '../../shared/constants';
 
-export const SAVE_MODEL = 'SAVE_MODEL';
+export const SAVE_PROCESSING = 'SAVE_PROCESSING';
+export const SAVE_FAILURE = 'SAVE_FAILURE';
+export const SAVE_SUCCESS = 'SAVE_SUCCESS';
 
 const hasMedia = schema =>
   _.some(schema.map, value => value.type === MEDIA);
@@ -37,6 +39,8 @@ const saveMap = {
 };
 
 export const saveModel = (schema, model) => dispatch => {
+  dispatch({type: SAVE_PROCESSING});
+
   saveTheModel(schema, model)
     .then(response => {
       model.id = model.id ? model.id : response.data.id;
@@ -48,15 +52,21 @@ export const saveModel = (schema, model) => dispatch => {
         return logic ? logic(schema, model, reference) : null;
       }).filter(r => !_.isNull(r));
 
-      Promise.all(referencesToSave)
+      return Promise.all(referencesToSave)
       .then(() => {
         dispatch({
-          type: SAVE_MODEL,
+          type: SAVE_SUCCESS,
           payload: {
             model: schema.model,
             data: model,
           },
         });
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: SAVE_FAILURE,
+        payload: err.response.data,
       });
     });
 };

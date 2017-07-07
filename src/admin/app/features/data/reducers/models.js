@@ -1,11 +1,11 @@
 import {stateReducer} from 'truefit-react-utils';
 import {Map, List} from 'immutable';
-import {LOAD_DATA, DELETE_MODEL, SAVE_MODEL} from '../actions';
+import {LOAD_DATA, DELETE_MODEL, SAVE_SUCCESS} from '../actions';
 
 export default stateReducer(Map(), {
   [LOAD_DATA]: (state, payload) => state.set(payload.model, List(payload.data)),
 
-  [SAVE_MODEL]: (state, payload) => {
+  [SAVE_SUCCESS]: (state, payload) => {
     const index = state.get(payload.model).findIndex(model => model.id === payload.data.id);
     if (index === -1) {
       return state.updateIn([payload.model], list => list.push(payload.data));

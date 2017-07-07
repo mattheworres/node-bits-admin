@@ -58,7 +58,7 @@ class ModelTable extends Component {
       hideDeletePrompt();
     };
 
-    const title = `Are you sure you want to delete this ${makeTitle(schema.title || schema.model, {plural: false})}`;
+    const title = `Are you sure you want to delete this ${makeTitle(schema.title || schema.model, {plural: false}).toLowerCase()}`;
 
     return (
       <SweetAlert

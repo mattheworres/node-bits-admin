@@ -30,3 +30,7 @@ export const SELECT_MODES = [HIDDEN, READ_ONLY, WRITE_ONLY, READ_WRITE];
 
 export const HEADER_HEIGHT = 30;
 export const ROW_HEIGHT = 50;
+
+export const PROCESSING = 'PROCESSING';
+export const SUCCESS = 'SUCCESS';
+export const FAILURE = 'FAILURE';

@@ -105,3 +105,19 @@
     margin-left: 10px;
   }
 }
+
+.saving {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100px;
+  width: 100%;
+}
+
+.edit-error-header {
+  margin: 0;
+  padding: 0 0 10px 0;
+  font-size: 18px;
+  color: $error;
+}
