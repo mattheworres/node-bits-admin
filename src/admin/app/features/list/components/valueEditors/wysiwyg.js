@@ -10,7 +10,7 @@ export default class Wysiwyg extends Component {
     autobind(this);
 
     this.state = {
-      value: this.props.value === '' ? RichTextEditor.createEmptyValue() : RichTextEditor.createValueFromString(this.props.value, 'html'),
+      value: this.rteValue(props.value),
       typing: false,
       typingTimeOut: 0,
     };
@@ -36,13 +36,17 @@ export default class Wysiwyg extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.value === '') {
+    if (nextProps.value !== undefined) { // eslint-disable-line
       // eslint-disable-next-line react/no-set-state
       this.setState({
         ...this.state,
-        value: RichTextEditor.createEmptyValue(),
+        value: this.rteValue(nextProps.value),
       });
     }
+  }
+
+  rteValue(value) {
+    return value === '' ? RichTextEditor.createEmptyValue() : RichTextEditor.createValueFromString(value, 'html');
   }
 
   handleChange(value) {
