@@ -62,22 +62,33 @@ class EditModal extends Component {
       return null;
     }
 
+    if (_.isArray(saveProcess.errors)) {
+      return (
+        <Well bsSize="sm">
+          <h1 className="edit-error-header">
+            Please fix the following errors:
+          </h1>
+          <ul>
+            {
+              saveProcess.errors.map((err, i) => (
+                <li key={i}>
+                  {err.message}
+                </li>
+              ))
+            }
+          </ul>
+        </Well>
+      );
+    }
+
     return (
       <Well bsSize="sm">
         <h1 className="edit-error-header">
-          Please fix the following errors:
+          There was an error saving, please try again.
         </h1>
-        <ul>
-          {
-            saveProcess.errors.map((err, i) => (
-              <li key={i}>
-                {err.message}
-              </li>
-            ))
-          }
-        </ul>
       </Well>
     );
+
   }
 
   render() {
