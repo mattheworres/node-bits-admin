@@ -91,6 +91,13 @@ class EditModal extends Component {
     const modelState = model ? 'Edit' : 'New';
     const action = isProcessingSave ? 'Saving' : null;
 
+    const footerButtons = isProcessingSave ? null : (
+      <div>
+        <Button className="pull-left" bsStyle="danger" onClick={this.handleCancel}>Cancel</Button>
+        <Button bsStyle="success" type="submit" onClick={this.handleSubmit}>Save</Button>
+      </div>
+    );
+
     return (
       <Modal show={shown} onHide={this.handleCancel}>
         <Modal.Header closeButton>
@@ -108,8 +115,7 @@ class EditModal extends Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button className="pull-left" bsStyle="danger" onClick={this.handleCancel}>Cancel</Button>
-          <Button bsStyle="success" type="submit" onClick={this.handleSubmit}>Save</Button>
+          {footerButtons}
         </Modal.Footer>
       </Modal>
     );
