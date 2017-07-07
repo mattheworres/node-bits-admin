@@ -34,6 +34,7 @@ class EditModal extends Component {
   // actions
   handleCancel() {
     this.props.stopEdit();
+    this.props.resetSaveProcess();
   }
 
   handleSubmit() {
