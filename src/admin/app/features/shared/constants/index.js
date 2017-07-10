@@ -34,3 +34,5 @@ export const ROW_HEIGHT = 50;
 export const PROCESSING = 'PROCESSING';
 export const SUCCESS = 'SUCCESS';
 export const FAILURE = 'FAILURE';
+
+export const DEFAULT_DATE_FORMAT = 'MMM Do YYYY, h:mm:ss a';

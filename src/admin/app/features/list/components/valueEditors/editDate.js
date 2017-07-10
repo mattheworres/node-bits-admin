@@ -2,9 +2,7 @@ import React from 'react';
 import Datetime from 'react-datetime';
 import moment from 'moment';
 
-import {DATETIME, DATE, TIME} from '../../../shared/constants';
-
-const defaultFormat = 'MMM Do YYYY, h:mm:ss a';
+import {DATETIME, DATE, TIME, DEFAULT_DATE_FORMAT} from '../../../shared/constants';
 
 const showDate = [DATETIME, DATE];
 const showTime = [DATETIME, TIME];
@@ -15,7 +13,7 @@ export default (item, key, schema, input) => {
   const dateFormat = showDate.includes(schema.type);
   const timeFormat = showTime.includes(schema.type);
 
-  const format = schema.format || defaultFormat;
+  const format = schema.format || DEFAULT_DATE_FORMAT;
   const value = input.value ? moment(input.value).format(format) : null;
 
   return (

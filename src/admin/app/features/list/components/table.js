@@ -50,7 +50,7 @@ class ModelTable extends Component {
     const {data, schema, sort, search} = this.props;
 
     const sorted = sortData(data, schema, sort);
-    const filtered = filterData(sorted, search);
+    const filtered = filterData(sorted, schema, search);
 
     return filtered;
   }

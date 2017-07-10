@@ -1,6 +1,6 @@
 import moment from 'moment';
+import {DEFAULT_DATE_FORMAT} from '../../../shared/constants';
 
-const defaultFormat = 'MMM Do YYYY, h:mm:ss a';
 
 export default (item, key, schema) => {
   const date = item[key];
@@ -8,5 +8,5 @@ export default (item, key, schema) => {
     return null;
   }
 
-  return moment(date).format(schema.format || defaultFormat);
+  return moment(date).format(schema.format || DEFAULT_DATE_FORMAT);
 };
