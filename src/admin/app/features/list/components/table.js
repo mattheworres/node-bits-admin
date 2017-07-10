@@ -65,15 +65,16 @@ class ModelTable extends Component {
   }
 
   renderHeader({dataKey, label, sortBy, sortDirection}) {
+    const {schema} = this.props;
     const sortIndicator = sortBy === dataKey ? <SortIndicator sortDirection={sortDirection} /> : null;
     return (
       <div>
-        <div>
+        <div className="list-header">
           {label}
           {sortIndicator}
         </div>
         <div>
-          <SearchInput dataKey={dataKey} />
+          <SearchInput dataKey={dataKey} schema={schema.map[dataKey]} />
         </div>
       </div>
     );

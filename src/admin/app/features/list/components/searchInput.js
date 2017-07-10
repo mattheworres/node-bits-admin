@@ -3,18 +3,19 @@ import {connect} from 'react-redux';
 
 import {searchList} from '../actions';
 import {searchKeySelector, searchValueForKeySelector} from '../selectors';
+import {PASSWORD} from '../../shared/constants';
 
 const handleClick = e => {
   e.stopPropagation();
 };
 
-const searchInput = ({searchKey, searchValue, searchList}) => {
+const searchInput = ({searchKey, schema, searchValue, searchList}) => {
   const handleChange = e => {
     searchList(searchKey, e.target.value);
   };
 
   return (
-    <input onClick={handleClick} value={searchValue} onChange={handleChange} />
+    <input onClick={handleClick} value={searchValue} onChange={handleChange} disabled={schema.type === PASSWORD} />
   );
 };
 
