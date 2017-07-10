@@ -1,17 +1,21 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import SweetAlert from 'react-bootstrap-sweetalert';
 import autobind from 'class-autobind';
 import {AutoSizer, Column, Table, SortIndicator} from 'react-virtualized';
 
-import {editModel, promptForDelete, hideDeletePrompt, sortList} from '../actions';
-import {sortSelector, deleteModalSelector} from '../selectors';
+import {editModel, promptForDelete, sortList} from '../actions';
+import {sortSelector, searchSelector} from '../selectors';
+import {getAtIndex, alternateRowClassName, sortData, filterData} from '../services';
+
 import {deleteModel} from '../../data/actions';
-import {makeTitle, getAtIndex, rowClassName, sortData} from '../../shared/services';
+import {makeTitle} from '../../shared/services';
 import {LIST_DISPLAY_MODES, READ_ONLY, HEADER_HEIGHT, ROW_HEIGHT} from '../../shared/constants';
 
 import OptionsGear from './optionsGear';
+import DeleteAlert from './deleteAlert';
+import SearchInput from './searchInput';
+
 import {renderValue} from './value';
 
 class ModelTable extends Component {
@@ -42,34 +46,16 @@ class ModelTable extends Component {
     return fields.filter(field => LIST_DISPLAY_MODES.includes(field.mode));
   }
 
-  // render
-  renderAlert() {
-    const {schema, deleteModel, deleteModal, hideDeletePrompt} = this.props;
-    if (!deleteModal.shown) {
-      return null;
-    }
+  compileData() {
+    const {data, schema, sort, search} = this.props;
 
-    const handleCancel = () => {
-      hideDeletePrompt();
-    };
+    const sorted = sortData(data, schema, sort);
+    const filtered = filterData(sorted, search);
 
-    const handleDelete = () => {
-      deleteModel(schema, deleteModal.item.id);
-      hideDeletePrompt();
-    };
-
-    const title = `Are you sure you want to delete this ${makeTitle(schema.title || schema.model, {plural: false}).toLowerCase()}`;
-
-    return (
-      <SweetAlert
-        danger
-        showCancel
-        title={title}
-        onConfirm={handleDelete}
-        onCancel={handleCancel} />
-    );
+    return filtered;
   }
 
+  // render
   renderNoData() {
     return (<div className="no-rows"><h3>No data available</h3></div>);
   }
@@ -79,10 +65,16 @@ class ModelTable extends Component {
   }
 
   renderHeader({dataKey, label, sortBy, sortDirection}) {
+    const sortIndicator = sortBy === dataKey ? <SortIndicator sortDirection={sortDirection} /> : null;
     return (
       <div>
-        {label}
-        {sortBy === dataKey && <SortIndicator sortDirection={sortDirection} />}
+        <div>
+          {label}
+          {sortIndicator}
+        </div>
+        <div>
+          <SearchInput dataKey={dataKey} />
+        </div>
       </div>
     );
   }
@@ -120,15 +112,16 @@ class ModelTable extends Component {
   }
 
   render() {
-    const {data, sort} = this.props;
+    const {sort, schema} = this.props;
+    const data = this.compileData();
 
     return (
       <div className="no-select">
         <AutoSizer disableHeight>
           {
-            ({width}) =>
-              (<Table
-                _data={sortData(data, sort)}
+            ({width}) => (
+              <Table
+                _data={data}
                 width={width}
                 height={HEADER_HEIGHT + ROW_HEIGHT * data.length}
                 headerHeight={HEADER_HEIGHT}
@@ -136,16 +129,17 @@ class ModelTable extends Component {
 
                 rowCount={data.length}
                 rowGetter={getAtIndex(data)}
-                rowClassName={rowClassName}
+                rowClassName={alternateRowClassName}
                 sortBy={sort.sortBy}
                 sortDirection={sort.sortDirection}
                 sort={this.onSort}
                 noRowsRenderer={this.renderNoData}>
                 {this.renderColumns(width)}
-              </Table>)
+              </Table>
+            )
           }
         </AutoSizer>
-        {this.renderAlert()}
+        <DeleteAlert schema={schema} />
       </div>
     );
   }
@@ -154,7 +148,7 @@ class ModelTable extends Component {
 const mapStateToProps = state =>
 ({
   sort: sortSelector(state),
-  deleteModal: deleteModalSelector(state),
+  search: searchSelector(state),
 });
 
-export default connect(mapStateToProps, {editModel, deleteModel, promptForDelete, hideDeletePrompt, sortList})(ModelTable);
+export default connect(mapStateToProps, {editModel, deleteModel, promptForDelete, sortList})(ModelTable);

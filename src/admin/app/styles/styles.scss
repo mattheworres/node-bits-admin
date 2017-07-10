@@ -12,7 +12,12 @@ $fa-font-path: '~font-awesome/fonts/';
 @import '../features/list/styles/list.scss';
 
 html,
-body,
+body {
+  height: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
 #app,
 .container,
 .row,

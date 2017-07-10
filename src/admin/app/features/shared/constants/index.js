@@ -28,7 +28,7 @@ export const LIST_DISPLAY_MODES = [READ_ONLY, READ_WRITE];
 export const EDIT_DISPLAY_MODES = [WRITE_ONLY, READ_WRITE];
 export const SELECT_MODES = [HIDDEN, READ_ONLY, WRITE_ONLY, READ_WRITE];
 
-export const HEADER_HEIGHT = 30;
+export const HEADER_HEIGHT = 60;
 export const ROW_HEIGHT = 50;
 
 export const PROCESSING = 'PROCESSING';
