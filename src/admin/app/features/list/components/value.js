@@ -39,9 +39,9 @@ const renderMap = {
   [RICH_TEXT]: renderRichText,
 };
 
-export const renderValue = (item, key, schema, fullSchema) => {
+export const renderValue = (item, key, schema, modelSchema) => {
   const render = renderMap[schema.type];
-  return render ? render(item, key, schema, fullSchema) : null;
+  return render ? render(item, key, schema, modelSchema) : null;
 };
 
 // edit value
@@ -70,7 +70,7 @@ const editMap = {
 
 export class EditValue extends Component {
   render() {
-    const {input, meta: {item, key, schema}} = this.props;
+    const {input, meta: {model, key, schema}} = this.props;
 
     const field = schema.map[key];
     const renderEdit = editMap[field.type];
@@ -82,7 +82,7 @@ export class EditValue extends Component {
     return (
       <div>
         <ControlLabel>{label}</ControlLabel>
-        {renderEdit(item, key, field, input)}
+        {renderEdit(model, key, field, input, schema)}
       </div>
     );
   }

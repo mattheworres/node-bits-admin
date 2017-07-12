@@ -1,7 +1,9 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 
-export default (item, key, schema, input) => {
+import {Image} from '../../../shared/components';
+
+export default (item, key, schema, input, modelSchema) => {
   const onDrop = files => {
     input.onChange(files[0]);
   };
@@ -10,6 +12,10 @@ export default (item, key, schema, input) => {
   if (input.value instanceof File) {
     preview = (
       <img src={input.value.preview} className="image-preview" alt="preview" />
+    );
+  } else if (input.value) {
+    preview = (
+      <Image item={item} field={key} model={modelSchema.model} className="image-preview" alt="preview" />
     );
   }
 
