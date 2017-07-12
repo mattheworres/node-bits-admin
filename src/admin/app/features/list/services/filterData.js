@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import moment from 'moment';
-import {DATETIME, DATE, TIME, DEFAULT_DATE_FORMAT} from '../../shared/constants';
+import {
+  DATETIME, DATE, TIME, BOOLEAN,
+  DEFAULT_DATE_FORMAT,
+} from '../../shared/constants';
+
+const falseValues = ['f', 'false', 'n', '0'];
 
 const itemValueByConfig = (itemValue, config) => {
   switch (config.type) {
@@ -17,13 +22,22 @@ const itemValueByConfig = (itemValue, config) => {
 export default (data, schema, filter) =>
   _.reduce(filter, (result, value, key) =>
     _.filter(result, item => {
+      const config = schema.map[key];
       const itemValue = item[key];
+
+      if (!value || value.length === 0) {
+        return true;
+      }
+
+      if (config.type === BOOLEAN) {
+        return falseValues.includes(value) ? !itemValue : itemValue;
+      }
+
       if (!itemValue) {
         return value.length === 0;
       }
 
-      const config = schema.map[key];
-      return itemValueByConfig(item[key], config).includes(value.toLowerCase());
+      return itemValueByConfig(itemValue, config).includes(value.toLowerCase());
     }),
     data
   );
