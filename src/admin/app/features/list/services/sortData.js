@@ -1,6 +1,7 @@
 /* eslint-disable radix */
 import moment from 'moment';
 import {SortDirection} from 'react-virtualized';
+import stringValueForRelation from './stringValueForRelation';
 import {
   INTEGER, DECIMAL, DOUBLE, FLOAT,
   UUID, STRING, PASSWORD, RICH_TEXT, TEXT,
@@ -10,7 +11,7 @@ import {
 
 const ID = 'id';
 
-const compare = (x, y, type) => {
+const compare = (x, y, config) => {
   if (x === y) {
     return 0;
   }
@@ -23,7 +24,7 @@ const compare = (x, y, type) => {
     return 1;
   }
 
-  switch (type) {
+  switch (config.type) {
     case BOOLEAN:
     case INTEGER:
       return parseInt(x) < parseInt(y) ? -1 : 1;
@@ -39,6 +40,8 @@ const compare = (x, y, type) => {
       return moment(x).isBefore(moment(y)) ? -1 : 1;
 
     case LIST:
+      return stringValueForRelation(x, config) < stringValueForRelation(y, config) ? -1 : 1;
+
     case MEDIA:
       return 0;
 
@@ -57,13 +60,13 @@ export default (data, schema, {sortBy = ID, sortDirection}) => {
   const sortDirectionMultiplier = sortDirection === SortDirection.DESC ? -1 : 1;
 
   const comparator = (x, y) => {
-    const type = schema.map[sortBy].type;
-    const result = compare(x[sortBy], y[sortBy], type);
+    const config = schema.map[sortBy];
+    const result = compare(x[sortBy], y[sortBy], config);
     if (result !== 0 || sortBy === ID) {
       return result * sortDirectionMultiplier;
     }
 
-    return compare(x[ID], y[ID], INTEGER);
+    return compare(x[ID], y[ID], {type: INTEGER});
   };
 
   return data.sort(comparator);

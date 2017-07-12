@@ -1,18 +1,31 @@
 import _ from 'lodash';
 import moment from 'moment';
+import stringValueForRelation from './stringValueForRelation';
 import {
   DATETIME, DATE, TIME, BOOLEAN,
-  DEFAULT_DATE_FORMAT,
+  INTEGER, DECIMAL, DOUBLE, FLOAT,
+  LIST, DEFAULT_DATE_FORMAT,
 } from '../../shared/constants';
+
 
 const falseValues = ['f', 'false', 'n', '0'];
 
-const itemValueByConfig = (itemValue, config) => {
+const itemValueByConfig = (item, itemValue, config) => {
   switch (config.type) {
     case DATETIME:
     case DATE:
     case TIME:
       return moment(itemValue).format(config.format || DEFAULT_DATE_FORMAT).toLowerCase();
+
+    case INTEGER:
+    case DECIMAL:
+    case DOUBLE:
+    case FLOAT:
+      return itemValue.toString().toLowerCase();
+
+    case LIST: {
+      return stringValueForRelation(item, config);
+    }
 
     default:
       return itemValue.toLowerCase();
@@ -37,7 +50,7 @@ export default (data, schema, filter) =>
         return value.length === 0;
       }
 
-      return itemValueByConfig(itemValue, config).includes(value.toLowerCase());
+      return itemValueByConfig(item, itemValue, config).includes(value.toLowerCase());
     }),
     data
   );
