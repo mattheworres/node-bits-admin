@@ -43,7 +43,7 @@ export default (data, schema, filter) =>
       }
 
       if (config.type === BOOLEAN) {
-        return falseValues.includes(value) ? !itemValue : itemValue;
+        return falseValues.includes(value.toLowerCase()) ? !itemValue : itemValue;
       }
 
       if (!itemValue) {
