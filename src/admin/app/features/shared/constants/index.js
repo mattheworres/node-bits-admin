@@ -21,6 +21,7 @@ export const TIME = 'TIME';
 export const BOOLEAN = 'BOOLEAN';
 export const TEXT = 'TEXT';
 export const LIST = 'LIST';
+export const ORDERED_LIST = 'ORDERED_LIST';
 export const MEDIA = 'MEDIA';
 export const RICH_TEXT = 'RICH_TEXT';
 

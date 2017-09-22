@@ -3,16 +3,16 @@ import {ControlLabel} from 'react-bootstrap';
 import {makeTitle} from '../../shared/services';
 
 import {
-  STRING, TEXT, UUID, PASSWORD, BOOLEAN, INTEGER, DOUBLE, DECIMAL, FLOAT, LIST, DATE, TIME,
+  STRING, TEXT, UUID, PASSWORD, BOOLEAN, INTEGER, DOUBLE, DECIMAL, FLOAT, LIST, ORDERED_LIST, DATE, TIME,
   MEDIA, RICH_TEXT,
 } from '../../shared/constants';
 
 import {
-  renderString, renderBoolean, renderNumber, renderList, renderDate, renderMedia, renderRichText,
+  renderString, renderBoolean, renderNumber, renderList, renderOrderedList, renderDate, renderMedia, renderRichText,
 } from './valueRenderers';
 
 import {
-  editString, editNumber, editBoolean, editDate, editList, editMedia, editRichText,
+  editString, editNumber, editBoolean, editDate, editList, editOrderedList, editMedia, editRichText,
 } from './valueEditors';
 
 // render value
@@ -30,6 +30,7 @@ const renderMap = {
   [FLOAT]: renderNumber,
 
   [LIST]: renderList,
+  [ORDERED_LIST]: renderOrderedList,
 
   [DATE]: renderDate,
   [TIME]: renderDate,
@@ -59,6 +60,7 @@ const editMap = {
   [FLOAT]: editNumber,
 
   [LIST]: editList,
+  [ORDERED_LIST]: editOrderedList,
 
   [DATE]: editDate,
   [TIME]: editDate,
