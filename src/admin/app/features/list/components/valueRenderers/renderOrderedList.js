@@ -2,15 +2,6 @@ import React from 'react';
 import {makeTitle} from '../../../shared/services';
 
 
-const render1To1 = (item, itemKey, source) => {
-  const relatedItem = item[source.referenceField];
-  const value = relatedItem ? relatedItem[source.referenceDisplay] : null;
-
-  return (
-    <span>{value}</span>
-  );
-};
-
 const RenderOrderedList = ({item, itemKey, schema}) => {
   const {source} = schema;
 

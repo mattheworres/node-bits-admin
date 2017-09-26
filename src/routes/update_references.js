@@ -62,12 +62,38 @@ class UpdateReferences {
       .catch(err => this.handleError(res, err));
   }
 
+  updateOrderedMtoM(res, root, source, data) {
+    const modelId = `${root.model}Id`;
+    const referenceId = `${source.reference}Id`;
+    const referenceKey = source.referenceKey;
+    const referenceOrder = source.referenceOrder;
+    const joinModel = `${root.model}_${source.reference}`;
+
+    this.db.find(joinModel, {where: {[modelId]: root.id}})
+      .then(response => {
+        //Remove everything
+        //Add them back with order intact
+        const toDo = [
+          ...response.map(x => this.db.delete(joinModel, x.id)),
+          ...data.map(x => this.db.create(joinModel, {[modelId]: root.id, [referenceId]: x.id, [referenceOrder]: data.indexOf(x) })),
+        ];
+
+        Promise.all(toDo)
+          .then(res.send())
+          .catch(err => this.handleError(res, err));
+      })
+      .catch(err => this.handleError(res, err));
+  }
+
   post(req, res) {
     const {root, source, data} = req.body;
 
     switch (source.type) {
       case MANY_TO_MANY:
-        this.updateMtoM(res, root, source, data);
+        if (source.referenceOrder)
+          this.updateOrderedMtoM(res, root, source, data);
+        else
+          this.updateMtoM(res, root, source, data);
         break;
 
       case ONE_TO_MANY:

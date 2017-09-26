@@ -27,7 +27,7 @@ class EditOrderedList extends Component {
   // load
   loadData(props) {
     const {loadData, schema: {source}} = props;
-    loadData(source.reference, null, [source.referenceKey, source.referenceDisplay]);
+    loadData(source.reference, null, [source.referenceKey, source.referenceDisplay, source.referenceOrder]);
   }
 
   // actions
@@ -48,7 +48,7 @@ class EditOrderedList extends Component {
     const {value, schema: {source}} = this.props;
 
     const items = value.map(value => ({
-      index: value[source.orderingColumn],
+      index: value[source.referenceOrder],
       value: value[source.referenceKey],
     }));
 
